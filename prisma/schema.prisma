@@ -80,6 +80,7 @@ model Prize {
   isEnabled   Boolean  @default(true)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+  deletedAt   DateTime?
 
   // Relation to Admin: A prize must be created by one admin
   adminId     String

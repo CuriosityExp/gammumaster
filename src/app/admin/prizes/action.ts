@@ -55,3 +55,48 @@ export async function createPrize(formData: FormData) {
     return { message: "Database Error: Failed to create prize." };
   }
 }
+
+export async function updatePrize(prizeId: string, formData: FormData) {
+  const validatedFields = PrizeSchema.safeParse({
+    name: formData.get("name"),
+    description: formData.get("description"),
+    imageUrl: formData.get("imageUrl"),
+    pointCost: formData.get("pointCost"),
+    stock: formData.get("stock"),
+  });
+
+  if (!validatedFields.success) {
+    return {
+      errors: validatedFields.error.flatten().fieldErrors,
+    };
+  }
+
+  try {
+    await prisma.prize.update({
+      where: { prizeId: prizeId },
+      data: validatedFields.data,
+    });
+
+    revalidatePath("/admin/prizes");
+    return { message: "Prize updated successfully." };
+
+  } catch (error) {
+    return { message: "Database Error: Failed to update prize." };
+  }
+}
+
+export async function deletePrize(prizeId: string) {
+  try {
+    // Change from .delete() to .update()
+    await prisma.prize.update({
+      where: { prizeId: prizeId },
+      data: {
+        deletedAt: new Date(), // Set the current timestamp
+      },
+    });
+    revalidatePath("/admin/prizes");
+    return { message: "Prize archived successfully." };
+  } catch (error) {
+    return { message: "Database Error: Failed to archive prize." };
+  }
+}
