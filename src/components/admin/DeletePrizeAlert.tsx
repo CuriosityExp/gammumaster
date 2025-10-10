@@ -13,7 +13,7 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
-import { deletePrize } from "@/app/admin/prizes/action";
+import { deletePrize } from "@/app/admin/prizes/actions";
 
 interface DeletePrizeAlertProps {
   readonly prizeId: string;
