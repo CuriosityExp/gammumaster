@@ -1,0 +1,87 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+// Defines the different types of point transactions
+enum TransactionType {
+  ADMIN_GRANT   // Points given by an admin
+  PRIZE_REDEEM  // Points spent on a prize
+  EVENT_TOPUP   // Points gained from an event QR code
+}
+
+// User model - still holds the current point total for quick access
+model User {
+  userId            String              @id @default(cuid())
+  name              String?
+  email             String?             @unique
+  qrCodeIdentifier  String              @unique @default(cuid())
+  points            Int                 @default(0)
+  createdAt         DateTime            @default(now())
+  updatedAt         DateTime            @updatedAt
+  
+  // A user can have many point transactions
+  transactions      PointTransaction[]
+}
+
+// Admin model - now with QR login capability
+model Admin {
+  adminId                     String             @id @default(cuid())
+  email                  String             @unique
+  qrCodeIdentifier       String             @unique @default(cuid()) // For QR code login
+  availablePointsToGrant Int                @default(100)
+  createdAt              DateTime           @default(now())
+  updatedAt              DateTime           @updatedAt
+
+  // An admin can be the source of many point grants
+  grantedTransactions    PointTransaction[]
+  createdPrizes          Prize[]
+}
+
+// The new model to log every single point transaction
+model PointTransaction {
+  id          String          @id @default(cuid())
+  amount      Int             // Can be positive (for grants) or negative (for redemptions)
+  type        TransactionType
+  description String?         // e.g., "Redeemed 'T-Shirt'", "Points from 'Grand Opening' event"
+  createdAt   DateTime        @default(now())
+
+  // Relation to User (every transaction must belong to a user)
+  userId      String
+  user        User            @relation(fields: [userId], references: [userId])
+
+  // Optional relation to Admin (for ADMIN_GRANT type transactions)
+  adminId     String?
+  admin       Admin?          @relation(fields: [adminId], references: [adminId])
+
+  // We can add a relation to an Event model here in the future
+  // eventId  String?
+}
+
+// Prize model - unchanged for now
+model Prize {
+  prizeId     String   @id @default(cuid())
+  name        String
+  description String?
+  imageUrl    String?
+  pointCost   Int
+  stock       Int      @default(0)
+  isEnabled   Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relation to Admin: A prize must be created by one admin
+  adminId     String
+  createdBy   Admin    @relation(fields: [adminId], references: [adminId])
+}
