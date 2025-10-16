@@ -15,8 +15,8 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { grantPoints } from "@/app/admin/users/actions";
-import { toast } from "sonner"; // We'll add this for notifications later
-import { useRef } from "react";
+import { toast } from "sonner"; 
+import { useRef, useState } from "react";
 
 interface AddPointsDialogProps {
   userId: string;
@@ -24,8 +24,21 @@ interface AddPointsDialogProps {
 }
 
 export function AddPointsDialog({ userId, userName }: AddPointsDialogProps) {
+  const [open, setOpen] = useState(false);
   const formRef = useRef<HTMLFormElement>(null);
   const grantPointsWithId = grantPoints.bind(null, userId);
+
+  const handleSubmit = async (formData: FormData) => {
+    const result = await grantPoints(userId, formData);
+
+    if (result.message?.includes("Error") || result.message?.includes("failed")) {
+      toast.error(result.message); // 2. Show error toast
+    } else {
+      toast.success(result.message); // 3. Show success toast
+      formRef.current?.reset();
+      setOpen(false); // Close the dialog on success
+    }
+  };
 
   return (
     <Dialog>
@@ -41,8 +54,9 @@ export function AddPointsDialog({ userId, userName }: AddPointsDialogProps) {
           </DialogDescription>
         </DialogHeader>
         <form
+          ref={formRef}
           action={async (formData) => {
-            await grantPointsWithId(formData);
+            await handleSubmit(formData);
             formRef.current?.reset();
             // We would add proper success/error handling here
           }}
