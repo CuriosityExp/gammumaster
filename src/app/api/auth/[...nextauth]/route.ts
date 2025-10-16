@@ -12,6 +12,7 @@ export const authOptions: AuthOptions = {
   },
   providers: [
     CredentialsProvider({
+      id: "admin-credentials",
       name: "QR Code",
       credentials: {
         qrCodeIdentifier: { label: "QR Identifier", type: "text" },
@@ -31,6 +32,7 @@ export const authOptions: AuthOptions = {
           return {
             id: admin.adminId, 
             email: admin.email,
+            role: 'admin'
           };
         } else {
           return null;
@@ -63,14 +65,16 @@ export const authOptions: AuthOptions = {
       if (user) {
         token.id = user.id; // Use user.id, which we mapped from adminId
         token.email = user.email;
+        token.role = user.role as "admin" | "user";
       }
       return token;
     },
     // The 'token' object here is what we returned from the jwt callback
     async session({ session, token }) {
       if (session.user) {
-        session.user.id = token.id as string;
+        session.user.id = token.id;
         session.user.email = token.email as string;
+        session.user.role = token.role as "admin" | "user";
       }
       return session;
     },

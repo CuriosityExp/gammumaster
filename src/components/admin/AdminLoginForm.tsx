@@ -23,7 +23,7 @@ export function AdminLoginForm() {
 
     toast.info("QR Code detected. Logging in...");
 
-    const res = await signIn("credentials", { qrCodeIdentifier : rawValue, redirect: false });
+    const res = await signIn("admin-credentials", { qrCodeIdentifier : rawValue, redirect: false });
     if (res?.ok) {
       toast.success("Login Successful! Redirecting...");
       // Stop scanning on success by not re-enabling it
