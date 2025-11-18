@@ -2,8 +2,9 @@
 
 import { PrismaClient } from "@/generated/prisma";
 import { getServerSession } from "next-auth";
-import Link from "next/link"; // 1. Import the Link component
+import Link from "next/link";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import { AccountDropdown } from "@/components/admin/AccountDropdown";
 
 const prisma = new PrismaClient();
 
@@ -46,22 +47,11 @@ export default async function AdminLayout({
             </h2>
           </Link>
           {adminData && (
-            <div className="text-right">
-              {/* 2. Add the link here */}
-              <Link href="/admin/account" className="text-sm font-medium hover:underline">
-                {adminData.type === "admin" ? adminData.data?.email : adminData.data?.user.email}
-              </Link>
-              {adminData.type === "admin" && adminData.data && "availablePointsToGrant" in adminData.data && (
-                <p className="text-sm text-muted-foreground">
-                  {adminData.data.availablePointsToGrant.toLocaleString()} points remaining
-                </p>
-              )}
-              {adminData.type === "facilitator" && adminData.data && "availablePointsToGrant" in adminData.data && (
-                <p className="text-sm text-muted-foreground">
-                  {adminData.data.availablePointsToGrant.toLocaleString()} points available
-                </p>
-              )}
-            </div>
+            <AccountDropdown
+              email={adminData.type === "admin" ? adminData.data?.email : adminData.data?.user.email}
+              availablePoints={adminData.data?.availablePointsToGrant}
+              role={adminData.type}
+            />
           )}
         </div>
       </header>

@@ -22,12 +22,13 @@ export async function requireAdmin() {
 export async function requireFacilitator() {
 	const session = await getServerSession(authOptions);
 
-	if (!session?.user?.email || session.user.role !== "facilitator") {
+	if (!session?.user?.id || session.user.role !== "facilitator") {
 		return null;
 	}
 
 	const facilitator = await prisma.userFacilitator.findUnique({
-		where: { email: session.user.email },
+		where: { userId: session.user.id },
+		include: { user: true },
 	});
 
 	return facilitator;
@@ -49,7 +50,8 @@ export async function requireAdminOrFacilitator() {
 
 	if (session.user.role === "facilitator") {
 		const facilitator = await prisma.userFacilitator.findUnique({
-			where: { email: session.user.email },
+			where: { userId: session.user.id },
+			include: { user: true },
 		});
 		return { type: "facilitator" as const, user: facilitator };
 	}
@@ -62,7 +64,7 @@ export function canManageUsers(role?: string) {
 }
 
 export function canGrantPoints(role?: string) {
-	return role === "admin";
+	return role === "admin" || role === "facilitator";
 }
 
 export function canManagePrizes(role?: string) {

@@ -8,9 +8,9 @@ const prisma = new PrismaClient();
 
 export default async function EventAttendancePage({
 	params,
-}: {
+}: Readonly<{
 	params: Promise<{ encryptedEventId: string }>;
-}) {
+}>) {
 	// Check if user is authenticated as admin or facilitator
 	const session = await getServerSession(authOptions);
 	
