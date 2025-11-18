@@ -17,68 +17,117 @@ export default async function AdminDashboard() {
 	return (
 		<div className="container mx-auto p-6">
 			<div className="mb-8">
-				<h1 className="text-3xl font-bold">
-					{isFacilitator ? "Facilitator" : "Admin"} Dashboard
-				</h1>
-				<p className="text-muted-foreground">
-					Select a section to manage
-				</p>
+				<div className="inline-flex items-center gap-3 mb-4">
+					<div className="h-12 w-12 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center">
+						<Shield className="h-6 w-6 text-white" />
+					</div>
+					<div>
+						<h1 className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+							{isFacilitator ? "Facilitator" : "Admin"} Dashboard
+						</h1>
+						<p className="text-muted-foreground">
+							Select a section to manage
+						</p>
+					</div>
+				</div>
 			</div>
 
 			<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-				<AdminMenuCard
-					title="Prize Management"
-					description="Create, edit, and manage prizes that users can redeem"
-					icon={<Gift className="h-8 w-8" />}
-					href="/admin/prizes"
-				/>
+				<div className="relative group hover:scale-105 transition-transform duration-200">
+					<div className="absolute inset-0 bg-gradient-to-br from-amber-500/10 to-orange-500/10 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" />
+					<AdminMenuCard
+						title="Prize Management"
+						description="Create, edit, and manage prizes that users can redeem"
+						icon={<Gift className="h-8 w-8 text-amber-500" />}
+						href="/admin/prizes"
+						iconBgColor="bg-amber-500/10"
+						iconHoverBgColor="group-hover:bg-amber-500/20"
+						hoverBorderColor="hover:border-amber-500"
+					/>
+				</div>
 				
 				{isAdmin && (
 					<>
-						<AdminMenuCard
-							title="Event Management"
-							description="Create and manage events with QR check-in"
-							icon={<Calendar className="h-8 w-8" />}
-							href="/admin/events"
-						/>
-						<AdminMenuCard
-							title="User Management"
-							description="View users and manage their points"
-							icon={<Users className="h-8 w-8" />}
-							href="/admin/users"
-						/>
-						<AdminMenuCard
-							title="Facilitator Management"
-							description="Manage facilitator accounts and permissions"
-							icon={<Shield className="h-8 w-8" />}
-							href="/admin/facilitators"
-						/>
+						<div className="relative group hover:scale-105 transition-transform duration-200">
+							<div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 to-indigo-500/10 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" />
+							<AdminMenuCard
+								title="Event Management"
+								description="Create and manage events with QR check-in"
+								icon={<Calendar className="h-8 w-8 text-blue-500" />}
+								href="/admin/events"
+								iconBgColor="bg-blue-500/10"
+								iconHoverBgColor="group-hover:bg-blue-500/20"
+								hoverBorderColor="hover:border-blue-500"
+							/>
+						</div>
+						<div className="relative group hover:scale-105 transition-transform duration-200">
+							<div className="absolute inset-0 bg-gradient-to-br from-green-500/10 to-emerald-500/10 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" />
+							<AdminMenuCard
+								title="User Management"
+								description="View users and manage their points"
+								icon={<Users className="h-8 w-8 text-green-500" />}
+								href="/admin/users"
+								iconBgColor="bg-green-500/10"
+								iconHoverBgColor="group-hover:bg-green-500/20"
+								hoverBorderColor="hover:border-green-500"
+							/>
+						</div>
+						<div className="relative group hover:scale-105 transition-transform duration-200">
+							<div className="absolute inset-0 bg-gradient-to-br from-purple-500/10 to-pink-500/10 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" />
+							<AdminMenuCard
+								title="Facilitator Management"
+								description="Manage facilitator accounts and permissions"
+								icon={<Shield className="h-8 w-8 text-purple-500" />}
+								href="/admin/facilitators"
+								iconBgColor="bg-purple-500/10"
+								iconHoverBgColor="group-hover:bg-purple-500/20"
+								hoverBorderColor="hover:border-purple-500"
+							/>
+						</div>
 					</>
 				)}
 
 				{isFacilitator && (
 					<>
-						<AdminMenuCard
-							title="Event Scanner"
-							description="View events and access QR scanner"
-							icon={<Calendar className="h-8 w-8" />}
-							href="/admin/events"
-						/>
-						<AdminMenuCard
-							title="Grant Points"
-							description="Grant points to users from your balance"
-							icon={<Users className="h-8 w-8" />}
-							href="/admin/users"
-						/>
+						<div className="relative group hover:scale-105 transition-transform duration-200">
+							<div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 to-indigo-500/10 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" />
+							<AdminMenuCard
+								title="Event Scanner"
+								description="View events and access QR scanner"
+								icon={<Calendar className="h-8 w-8 text-blue-500" />}
+								href="/admin/events"
+								iconBgColor="bg-blue-500/10"
+								iconHoverBgColor="group-hover:bg-blue-500/20"
+								hoverBorderColor="hover:border-blue-500"
+							/>
+						</div>
+						<div className="relative group hover:scale-105 transition-transform duration-200">
+							<div className="absolute inset-0 bg-gradient-to-br from-green-500/10 to-emerald-500/10 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" />
+							<AdminMenuCard
+								title="Grant Points"
+								description="Grant points to users from your balance"
+								icon={<Users className="h-8 w-8 text-green-500" />}
+								href="/admin/users"
+								iconBgColor="bg-green-500/10"
+								iconHoverBgColor="group-hover:bg-green-500/20"
+								hoverBorderColor="hover:border-green-500"
+							/>
+						</div>
 					</>
 				)}
 
-				<AdminMenuCard
-					title="Account Settings"
-					description="Manage your account and settings"
-					icon={<User className="h-8 w-8" />}
-					href="/admin/account"
-				/>
+				<div className="relative group hover:scale-105 transition-transform duration-200">
+					<div className="absolute inset-0 bg-gradient-to-br from-slate-500/10 to-gray-500/10 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" />
+					<AdminMenuCard
+						title="Account Settings"
+						description="Manage your account and settings"
+						icon={<User className="h-8 w-8 text-slate-500" />}
+						href="/admin/account"
+						iconBgColor="bg-slate-500/10"
+						iconHoverBgColor="group-hover:bg-slate-500/20"
+						hoverBorderColor="hover:border-slate-500"
+					/>
+				</div>
 			</div>
 		</div>
 	);

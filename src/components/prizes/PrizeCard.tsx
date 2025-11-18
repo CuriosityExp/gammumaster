@@ -1,4 +1,4 @@
-// src/components/admin/PrizeCard.tsx
+// src/components/prizes/PrizeCard.tsx
 
 "use client"; // Marks this as a Client Component
 

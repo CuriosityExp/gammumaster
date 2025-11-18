@@ -1,4 +1,6 @@
 // src/components/admin/DeletePrizeAlert.tsx
+// src/components/prizes/DeletePrizeAlert.tsx
+
 "use client";
 
 import {
@@ -39,8 +41,8 @@ export function DeletePrizeAlert({
           <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
           <AlertDialogDescription>
             This will archive the prize and hide it from all users. You can
-            recover it from the database later. Are you sure you want to archive
-            <span className="font-semibold"> "{prizeName}"</span>?
+            recover it from the database later. Are you sure you want to archive{" "}
+            <span className="font-semibold">"{prizeName}"</span>?
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>

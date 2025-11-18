@@ -1,4 +1,4 @@
-// src/components/admin/DeleteFacilitatorAlert.tsx
+// src/components/facilitators/DeleteFacilitatorAlert.tsx
 "use client";
 
 import {

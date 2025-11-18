@@ -1,7 +1,7 @@
 // src/app/admin/prizes/page.tsx
 import { PrismaClient } from "@/generated/prisma";
-import { CreatePrizeDialog } from "@/components/admin/CreatePrizeDialog";
-import { PrizeCard } from "@/components/admin/PrizeCard";
+import { CreatePrizeDialog } from "@/components/prizes/CreatePrizeDialog";
+import { PrizeCard } from "@/components/prizes/PrizeCard";
 import { SearchInput } from "@/components/admin/SearchInput";
 import { CardGridSkeleton } from "@/components/admin/CardGridSkeleton";
 import { Suspense } from "react";

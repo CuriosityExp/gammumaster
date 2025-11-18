@@ -1,8 +1,8 @@
 // src/app/admin/facilitators/page.tsx
-import { CreateFacilitatorDialog } from "@/components/admin/CreateFacilitatorDialog";
-import { EditFacilitatorDialog } from "@/components/admin/EditFacilitatorDialog";
-import { DeleteFacilitatorAlert } from "@/components/admin/DeleteFacilitatorAlert";
-import { FacilitatorDetailsDialog } from "@/components/admin/FacilitatorDetailsDialog";
+import { CreateFacilitatorDialog } from "@/components/facilitators/CreateFacilitatorDialog";
+import { EditFacilitatorDialog } from "@/components/facilitators/EditFacilitatorDialog";
+import { DeleteFacilitatorAlert } from "@/components/facilitators/DeleteFacilitatorAlert";
+import { FacilitatorDetailsDialog } from "@/components/facilitators/FacilitatorDetailsDialog";
 import { SearchInput } from "@/components/admin/SearchInput";
 import { TableSkeleton } from "@/components/admin/TableSkeleton";
 import { Suspense } from "react";

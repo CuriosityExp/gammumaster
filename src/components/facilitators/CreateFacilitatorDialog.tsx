@@ -1,4 +1,4 @@
-// src/components/admin/CreateFacilitatorDialog.tsx
+// src/components/facilitators/CreateFacilitatorDialog.tsx
 "use client";
 
 import { Button } from "@/components/ui/button";
