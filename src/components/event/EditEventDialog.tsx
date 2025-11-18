@@ -52,9 +52,9 @@ export function EditEventDialog({ event }: EditEventDialogProps) {
 	return (
 		<Dialog open={open} onOpenChange={setOpen}>
 			<DialogTrigger asChild>
-				<Button variant="outline" size="sm">
-					<Pencil className="mr-2 h-4 w-4" />
-					Edit
+				<Button variant="outline" size="default" className="h-9 px-2 sm:px-4 min-w-0" title="Edit event">
+					<Pencil className="h-4 w-4 shrink-0" />
+					<span className="hidden sm:inline ml-1 lg:ml-2">Edit</span>
 				</Button>
 			</DialogTrigger>
 			<DialogContent>

@@ -111,10 +111,56 @@ export async function deleteEvent(eventId: string) {
 	}
 }
 
-export async function getAllEvents() {
+export async function getAllEvents(searchQuery?: string, page?: number) {
 	try {
+		// Build WHERE clause
+		const where = {
+			deletedAt: null,
+			...(searchQuery && {
+				OR: [
+					{ title: { contains: searchQuery } },
+					{ description: { contains: searchQuery } },
+				],
+			}),
+		};
+
+		// If pagination parameters provided, use them
+		if (page !== undefined) {
+			const ITEMS_PER_PAGE = 9; // 3x3 grid
+			const skip = (page - 1) * ITEMS_PER_PAGE;
+
+			const [events, totalCount] = await Promise.all([
+				prisma.event.findMany({
+					where,
+					include: {
+						createdBy: {
+							select: {
+								email: true,
+							},
+						},
+						_count: {
+							select: {
+								attendances: true,
+							},
+						},
+					},
+					orderBy: { createdAt: "desc" },
+					skip,
+					take: ITEMS_PER_PAGE,
+				}),
+				prisma.event.count({ where }),
+			]);
+
+			return {
+				events,
+				totalCount,
+				totalPages: Math.ceil(totalCount / ITEMS_PER_PAGE),
+			};
+		}
+
+		// Without pagination (backward compatible)
 		const events = await prisma.event.findMany({
-			where: { deletedAt: null },
+			where,
 			include: {
 				createdBy: {
 					select: {

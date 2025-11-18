@@ -43,9 +43,9 @@ export function DeleteEventAlert({ eventId, eventTitle }: DeleteEventAlertProps)
 	return (
 		<AlertDialog open={open} onOpenChange={setOpen}>
 			<AlertDialogTrigger asChild>
-				<Button variant="destructive" size="sm">
-					<Trash2 className="mr-2 h-4 w-4" />
-					Delete
+				<Button variant="destructive" size="default" className="h-9 px-2 sm:px-4 min-w-0" title="Delete event">
+					<Trash2 className="h-4 w-4 shrink-0" />
+					<span className="hidden sm:inline ml-1 lg:ml-2">Delete</span>
 				</Button>
 			</AlertDialogTrigger>
 			<AlertDialogContent>
