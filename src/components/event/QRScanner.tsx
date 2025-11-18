@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { recordAttendance } from "@/app/event/[encryptedEventId]/actions";
 import { toast } from "sonner";
-import { CheckCircle, XCircle } from "lucide-react";
+import { CheckCircle, XCircle, SwitchCamera } from "lucide-react";
 import type { IDetectedBarcode } from "@yudiel/react-qr-scanner";
 
 interface QRScannerProps {
@@ -15,6 +15,7 @@ interface QRScannerProps {
 
 export function QRScanner({ encryptedEventId }: QRScannerProps) {
 	const [isScanning, setIsScanning] = useState(true);
+	const [facingMode, setFacingMode] = useState<"user" | "environment">("environment");
 
 	const handleScan = async (result: IDetectedBarcode[]): Promise<void> => {
 		if (!isScanning || result.length === 0) return;
@@ -82,6 +83,11 @@ export function QRScanner({ encryptedEventId }: QRScannerProps) {
 		}
 	};
 
+	const toggleCamera = () => {
+		setFacingMode((prev) => (prev === "environment" ? "user" : "environment"));
+		toast.info(`Switched to ${facingMode === "environment" ? "front" : "back"} camera`);
+	};
+
 	return (
 		<Card>
 			<CardHeader>
@@ -96,17 +102,31 @@ export function QRScanner({ encryptedEventId }: QRScannerProps) {
 								console.error(`QR Scanner Error: ${error.message}`);
 							}
 						}}
+						constraints={{
+							facingMode: facingMode,
+						}}
 					/>
 				</div>
 
-				<Button
-					onClick={handleManualInput}
-					variant="outline"
-					disabled={!isScanning}
-					className="w-full"
-				>
-					Manual Entry
-				</Button>
+				<div className="grid grid-cols-2 gap-2">
+					<Button
+						onClick={toggleCamera}
+						variant="secondary"
+						disabled={!isScanning}
+						className="w-full"
+					>
+						<SwitchCamera className="mr-2 h-4 w-4" />
+						Switch Camera
+					</Button>
+					<Button
+						onClick={handleManualInput}
+						variant="outline"
+						disabled={!isScanning}
+						className="w-full"
+					>
+						Manual Entry
+					</Button>
+				</div>
 
 				<div className="text-sm text-muted-foreground text-center">
 					<p>Point the camera at the attendee's QR code to check them in</p>

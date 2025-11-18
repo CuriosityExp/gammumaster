@@ -21,9 +21,11 @@ import { useRef, useState } from "react";
 interface AddPointsDialogProps {
   userId: string;
   userName: string | null;
+  granterRole: "admin" | "facilitator";
+  availablePoints: number;
 }
 
-export function AddPointsDialog({ userId, userName }: AddPointsDialogProps) {
+export function AddPointsDialog({ userId, userName, granterRole, availablePoints }: AddPointsDialogProps) {
   const [open, setOpen] = useState(false);
   const formRef = useRef<HTMLFormElement>(null);
   const grantPointsWithId = grantPoints.bind(null, userId);
@@ -31,17 +33,21 @@ export function AddPointsDialog({ userId, userName }: AddPointsDialogProps) {
   const handleSubmit = async (formData: FormData) => {
     const result = await grantPoints(userId, formData);
 
-    if (result.message?.includes("Error") || result.message?.includes("failed")) {
-      toast.error(result.message); // 2. Show error toast
-    } else {
-      toast.success(result.message); // 3. Show success toast
+    if (result.success) {
+      toast.success(result.message); // Show success toast
       formRef.current?.reset();
       setOpen(false); // Close the dialog on success
+    } else {
+      if (result.errors) {
+        toast.error(JSON.stringify(result.errors));
+      } else {
+        toast.error(result.message || "Failed to grant points"); // Show error toast
+      }
     }
   };
 
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button size="sm">Add Points</Button>
       </DialogTrigger>
@@ -49,8 +55,10 @@ export function AddPointsDialog({ userId, userName }: AddPointsDialogProps) {
         <DialogHeader>
           <DialogTitle>Grant Points to {userName}</DialogTitle>
           <DialogDescription>
-            Enter the number of points to grant. This will be deducted from your
-            available points pool.
+            {granterRole === "facilitator" 
+              ? `Enter the number of points to grant. This will be deducted from your available balance (${availablePoints.toLocaleString()} points).`
+              : "Enter the number of points to grant. This will be deducted from your available points pool."
+            }
           </DialogDescription>
         </DialogHeader>
         <form
@@ -71,6 +79,8 @@ export function AddPointsDialog({ userId, userName }: AddPointsDialogProps) {
                 name="points"
                 type="number"
                 required
+                min="1"
+                max={availablePoints}
                 className="col-span-3"
               />
             </div>

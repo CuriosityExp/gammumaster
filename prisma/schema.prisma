@@ -30,16 +30,23 @@ model User {
   points            Int                 @default(0)
   createdAt         DateTime            @default(now())
   updatedAt         DateTime            @updatedAt
+  deletedAt         DateTime?           // Soft delete flag
+  
+  // Relation to Admin who created this user
+  adminId           String?
+  createdBy         Admin?              @relation(fields: [adminId], references: [adminId])
   
   // A user can have many point transactions
   transactions      PointTransaction[]
   // A user can attend many events
   eventAttendances  UserEventAttendance[]
+  // A user can be a facilitator (optional)
+  facilitator       UserFacilitator?
 }
 
 // Admin model - now with QR login capability
 model Admin {
-  adminId                     String             @id @default(cuid())
+  adminId                String             @id @default(cuid())
   email                  String             @unique
   qrCodeIdentifier       String             @unique @default(cuid()) // For QR code login
   availablePointsToGrant Int                @default(100)
@@ -50,14 +57,32 @@ model Admin {
   grantedTransactions    PointTransaction[]
   createdPrizes          Prize[]
   createdEvents          Event[]
+  createdUsers           User[]             // An admin can create many users
+}
+
+// UserFacilitator model - limited admin access, linked to User
+model UserFacilitator {
+  facilitatorId          String   @id @default(cuid())
+  userId                 String   @unique // Link to User table
+  availablePointsToGrant Int      @default(100) // Points they can grant to users
+  createdAt              DateTime @default(now())
+  updatedAt              DateTime @updatedAt
+
+  // Relation to User
+  user                   User     @relation(fields: [userId], references: [userId])
+
+  // A facilitator can create prizes
+  createdPrizes          Prize[]
+  // A facilitator can grant points to users
+  grantedTransactions    PointTransaction[]
 }
 
 // The new model to log every single point transaction
 model PointTransaction {
   id          String          @id @default(cuid())
-  amount      Int             // Can be positive (for grants) or negative (for redemptions)
+  amount      Int             
   type        TransactionType
-  description String?         // e.g., "Redeemed 'T-Shirt'", "Points from 'Grand Opening' event"
+  description String?         
   createdAt   DateTime        @default(now())
 
   // Relation to User (every transaction must belong to a user)
@@ -68,11 +93,16 @@ model PointTransaction {
   adminId     String?
   admin       Admin?          @relation(fields: [adminId], references: [adminId])
 
+  // Optional relation to UserFacilitator (for facilitator grants)
+  facilitatorId String?
+  facilitator   UserFacilitator? @relation(fields: [facilitatorId], references: [facilitatorId])
+
+  // Note: Only one of adminId or facilitatorId should be set for grant transactions
   // We can add a relation to an Event model here in the future
   // eventId  String?
 }
 
-// Prize model - unchanged for now
+// Prize model - can be created by Admin or UserFacilitator
 model Prize {
   prizeId     String   @id @default(cuid())
   name        String
@@ -85,9 +115,15 @@ model Prize {
   updatedAt   DateTime @updatedAt
   deletedAt   DateTime?
 
-  // Relation to Admin: A prize must be created by one admin
-  adminId     String
-  createdBy   Admin    @relation(fields: [adminId], references: [adminId])
+  // Relation to Admin: A prize can be created by an admin
+  adminId          String?
+  createdByAdmin   Admin?           @relation(fields: [adminId], references: [adminId])
+
+  // Relation to UserFacilitator: A prize can be created by a facilitator
+  facilitatorId         String?
+  createdByFacilitator  UserFacilitator? @relation(fields: [facilitatorId], references: [facilitatorId])
+
+  // Note: Application logic should ensure only one of adminId or facilitatorId is set
 }
 
 // Event model - tracks events that users can attend

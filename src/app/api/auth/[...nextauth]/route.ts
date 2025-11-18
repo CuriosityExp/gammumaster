@@ -22,8 +22,7 @@ export const authOptions: AuthOptions = {
           return null;
         }
 
-        console.log(credentials, "CRED");
-
+        // Check if it's an admin
         const admin = await prisma.admin.findUnique({
           where: { qrCodeIdentifier: credentials.qrCodeIdentifier },
         });
@@ -34,9 +33,23 @@ export const authOptions: AuthOptions = {
             email: admin.email,
             role: 'admin'
           };
-        } else {
-          return null;
         }
+
+        // Check if it's a user who is also a facilitator
+        const user = await prisma.user.findUnique({
+          where: { qrCodeIdentifier: credentials.qrCodeIdentifier },
+          include: { facilitator: true }
+        });
+
+        if (user?.facilitator) {
+          return {
+            id: user.userId,
+            email: user.email,
+            role: 'facilitator'
+          };
+        }
+
+        return null;
       },
     }),
 
@@ -65,7 +78,7 @@ export const authOptions: AuthOptions = {
       if (user) {
         token.id = user.id; // Use user.id, which we mapped from adminId
         token.email = user.email;
-        token.role = user.role as "admin" | "user";
+        token.role = user.role as "admin" | "user" | "facilitator";
       }
       return token;
     },
@@ -74,7 +87,7 @@ export const authOptions: AuthOptions = {
       if (session.user) {
         session.user.id = token.id;
         session.user.email = token.email as string;
-        session.user.role = token.role as "admin" | "user";
+        session.user.role = token.role as "admin" | "user" | "facilitator";
       }
       return session;
     },

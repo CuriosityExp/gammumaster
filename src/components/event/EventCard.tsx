@@ -22,9 +22,10 @@ interface EventCardProps {
 			attendances: number;
 		};
 	};
+	readonly isAdminView?: boolean; // Whether to show edit/delete buttons
 }
 
-export function EventCard({ event }: EventCardProps) {
+export function EventCard({ event, isAdminView = true }: EventCardProps) {
 	const eventUrl = `${typeof window !== "undefined" ? window.location.origin : ""}/event/${event.eventId}`;
 
 	const copyEventLink = () => {
@@ -92,10 +93,13 @@ export function EventCard({ event }: EventCardProps) {
 						<Copy className="h-4 w-4" />
 					</Button>
 				</div>
-				<div className="flex gap-2 w-full">
-					<EditEventDialog event={event} />
-					<DeleteEventAlert eventId={event.eventId} eventTitle={event.title} />
-				</div>
+				{/* Only show edit/delete buttons for admins */}
+				{isAdminView && (
+					<div className="flex gap-2 w-full">
+						<EditEventDialog event={event} />
+						<DeleteEventAlert eventId={event.eventId} eventTitle={event.title} />
+					</div>
+				)}
 			</CardFooter>
 		</Card>
 	);

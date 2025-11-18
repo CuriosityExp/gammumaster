@@ -11,10 +11,22 @@ async function getAdminData() {
   const session = await getServerSession(authOptions);
   if (!session?.user?.id) return null;
 
-  const admin = await prisma.admin.findUnique({
-    where: { adminId: session.user.id },
-  });
-  return admin;
+  if (session.user.role === "admin") {
+    const admin = await prisma.admin.findUnique({
+      where: { adminId: session.user.id },
+    });
+    return { type: "admin" as const, data: admin };
+  }
+
+  if (session.user.role === "facilitator") {
+    const facilitator = await prisma.userFacilitator.findUnique({
+      where: { userId: session.user.id },
+      include: { user: true },
+    });
+    return { type: "facilitator" as const, data: facilitator };
+  }
+
+  return null;
 }
 
 export default async function AdminLayout({
@@ -22,24 +34,33 @@ export default async function AdminLayout({
 }: {
   readonly children: React.ReactNode;
 }) {
-  const admin = await getAdminData();
+  const adminData = await getAdminData();
 
   return (
     <div>
       <header className="border-b">
         <div className="container mx-auto flex h-16 items-center justify-between p-8">
           <Link href="/admin" className="hover:underline">
-            <h2 className="text-lg font-semibold">Admin Dashboard</h2>
+            <h2 className="text-lg font-semibold">
+              {adminData?.type === "facilitator" ? "Facilitator" : "Admin"} Dashboard
+            </h2>
           </Link>
-          {admin && (
+          {adminData && (
             <div className="text-right">
               {/* 2. Add the link here */}
               <Link href="/admin/account" className="text-sm font-medium hover:underline">
-                {admin.email}
+                {adminData.type === "admin" ? adminData.data?.email : adminData.data?.user.email}
               </Link>
-              <p className="text-sm text-muted-foreground">
-                {admin.availablePointsToGrant.toLocaleString()} points remaining
-              </p>
+              {adminData.type === "admin" && adminData.data && "availablePointsToGrant" in adminData.data && (
+                <p className="text-sm text-muted-foreground">
+                  {adminData.data.availablePointsToGrant.toLocaleString()} points remaining
+                </p>
+              )}
+              {adminData.type === "facilitator" && adminData.data && "availablePointsToGrant" in adminData.data && (
+                <p className="text-sm text-muted-foreground">
+                  {adminData.data.availablePointsToGrant.toLocaleString()} points available
+                </p>
+              )}
             </div>
           )}
         </div>
