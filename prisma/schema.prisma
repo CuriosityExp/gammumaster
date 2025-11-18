@@ -33,6 +33,8 @@ model User {
   
   // A user can have many point transactions
   transactions      PointTransaction[]
+  // A user can attend many events
+  eventAttendances  UserEventAttendance[]
 }
 
 // Admin model - now with QR login capability
@@ -47,6 +49,7 @@ model Admin {
   // An admin can be the source of many point grants
   grantedTransactions    PointTransaction[]
   createdPrizes          Prize[]
+  createdEvents          Event[]
 }
 
 // The new model to log every single point transaction
@@ -85,4 +88,40 @@ model Prize {
   // Relation to Admin: A prize must be created by one admin
   adminId     String
   createdBy   Admin    @relation(fields: [adminId], references: [adminId])
+}
+
+// Event model - tracks events that users can attend
+model Event {
+  eventId     String   @id @default(cuid())
+  title       String
+  description String?
+  eventBanner String?  // URL or path to event banner image
+  pointAmount Int      // Points awarded for attending this event
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  deletedAt   DateTime? // Soft delete flag
+
+  // Relation to Admin: An event must be created by one admin
+  adminId     String
+  createdBy   Admin    @relation(fields: [adminId], references: [adminId])
+  
+  // An event can have many attendees
+  attendances UserEventAttendance[]
+}
+
+// UserEventAttendance - junction table tracking which users attended which events
+model UserEventAttendance {
+  id         Int      @id @default(autoincrement())
+  attendedAt DateTime @default(now())
+  
+  // Relation to User
+  userId     String
+  user       User     @relation(fields: [userId], references: [userId])
+  
+  // Relation to Event
+  eventId    String
+  event      Event    @relation(fields: [eventId], references: [eventId])
+  
+  // Ensure a user can only attend an event once
+  @@unique([userId, eventId])
 }

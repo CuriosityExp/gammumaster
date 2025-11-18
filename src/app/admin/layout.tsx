@@ -28,7 +28,9 @@ export default async function AdminLayout({
     <div>
       <header className="border-b">
         <div className="container mx-auto flex h-16 items-center justify-between p-8">
-          <h2 className="text-lg font-semibold">Admin Dashboard</h2>
+          <Link href="/admin" className="hover:underline">
+            <h2 className="text-lg font-semibold">Admin Dashboard</h2>
+          </Link>
           {admin && (
             <div className="text-right">
               {/* 2. Add the link here */}

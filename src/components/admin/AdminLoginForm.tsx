@@ -27,7 +27,7 @@ export function AdminLoginForm() {
     if (res?.ok) {
       toast.success("Login Successful! Redirecting...");
       // Stop scanning on success by not re-enabling it
-      router.push("/admin/prizes");
+      router.replace("/admin");
     } else {
       toast.error("Login Failed: Invalid QR Code.");
       setError("Invalid QR Code. Please scan again.");
