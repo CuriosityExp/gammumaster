@@ -103,9 +103,20 @@ export default async function AdminUsersPage({
     <div className="container mx-auto p-8">
       <div className="flex justify-between items-center mb-8">
         <div>
-          <h1 className="text-4xl font-bold">Manage Users</h1>
-          <p className="text-muted-foreground mt-2">
-            Available points to grant: <span className="font-semibold">{availablePoints.toLocaleString()}</span>
+          <div className="inline-flex items-center gap-3 mb-2">
+            <div className="h-12 w-12 rounded-full bg-gradient-to-br from-green-500 to-emerald-600 flex items-center justify-center shadow-lg">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+              </svg>
+            </div>
+            <div>
+              <h1 className="text-4xl font-bold bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent">
+                Manage Users
+              </h1>
+            </div>
+          </div>
+          <p className="text-muted-foreground ml-15">
+            Available points to grant: <span className="font-semibold text-green-600 dark:text-green-400">{availablePoints.toLocaleString()}</span>
           </p>
         </div>
         <CreateUserDialog />

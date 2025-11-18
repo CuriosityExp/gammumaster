@@ -89,12 +89,20 @@ export function QRScanner({ encryptedEventId }: QRScannerProps) {
 	};
 
 	return (
-		<Card>
-			<CardHeader>
-				<CardTitle>Scan Attendee QR Code</CardTitle>
+		<Card className="border-2 shadow-lg">
+			<CardHeader className="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-950/20 dark:to-indigo-950/20 border-b">
+				<CardTitle className="flex items-center gap-2 text-blue-700 dark:text-blue-300">
+					<div className="h-10 w-10 rounded-full bg-blue-500/10 flex items-center justify-center">
+						<svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-blue-600 dark:text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+							<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M12 12h-4.01M12 12V8m0 4v4m4-4h4m-4 0V8m0 4v4" />
+						</svg>
+					</div>
+					Scan Attendee QR Code
+				</CardTitle>
 			</CardHeader>
-			<CardContent className="space-y-4">
-				<div className="w-full rounded-lg overflow-hidden border">
+			<CardContent className="space-y-4 pt-6">
+				<div className="relative w-full rounded-xl overflow-hidden border-4 border-blue-500/20 shadow-inner">
+					<div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 to-indigo-500/5 pointer-events-none z-10" />
 					<Scanner
 						onScan={handleScan}
 						onError={(error: unknown) => {
@@ -108,12 +116,12 @@ export function QRScanner({ encryptedEventId }: QRScannerProps) {
 					/>
 				</div>
 
-				<div className="grid grid-cols-2 gap-2">
+				<div className="grid grid-cols-2 gap-3">
 					<Button
 						onClick={toggleCamera}
 						variant="secondary"
 						disabled={!isScanning}
-						className="w-full"
+						className="w-full bg-indigo-500/10 hover:bg-indigo-500/20 text-indigo-700 dark:text-indigo-300 border-indigo-200 dark:border-indigo-800"
 					>
 						<SwitchCamera className="mr-2 h-4 w-4" />
 						Switch Camera
@@ -122,14 +130,16 @@ export function QRScanner({ encryptedEventId }: QRScannerProps) {
 						onClick={handleManualInput}
 						variant="outline"
 						disabled={!isScanning}
-						className="w-full"
+						className="w-full border-blue-200 hover:bg-blue-50 dark:border-blue-800 dark:hover:bg-blue-950/20"
 					>
 						Manual Entry
 					</Button>
 				</div>
 
-				<div className="text-sm text-muted-foreground text-center">
-					<p>Point the camera at the attendee's QR code to check them in</p>
+				<div className="text-sm text-center p-3 rounded-lg bg-blue-50 dark:bg-blue-950/20 border border-blue-100 dark:border-blue-900">
+					<p className="text-blue-700 dark:text-blue-300 font-medium">
+						Point the camera at the attendee's QR code to check them in
+					</p>
 				</div>
 			</CardContent>
 		</Card>
