@@ -88,6 +88,7 @@ export async function recordAttendance(
 		});
 
 		revalidatePath(`/event/${encryptedEventId}`);
+		revalidatePath("/dashboard");
 
 		return {
 			success: true,

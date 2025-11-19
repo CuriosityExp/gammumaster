@@ -21,9 +21,9 @@ export function PointSummaryCard({ summary }: PointSummaryCardProps) {
 
   return (
     <div className="grid gap-4 md:grid-cols-3 mb-6">
-      <Card>
+      <Card className="border-2 border-green-200 bg-green-50/50">
         <CardHeader className="pb-3">
-          <CardTitle className="text-sm font-medium text-muted-foreground">
+          <CardTitle className="text-sm font-medium text-green-700">
             {t('totalEarned')}
           </CardTitle>
         </CardHeader>
@@ -44,9 +44,9 @@ export function PointSummaryCard({ summary }: PointSummaryCardProps) {
         </CardContent>
       </Card>
 
-      <Card>
+      <Card className="border-2 border-red-200 bg-red-50/50">
         <CardHeader className="pb-3">
-          <CardTitle className="text-sm font-medium text-muted-foreground">
+          <CardTitle className="text-sm font-medium text-red-700">
             {t('totalSpent')}
           </CardTitle>
         </CardHeader>
@@ -63,7 +63,7 @@ export function PointSummaryCard({ summary }: PointSummaryCardProps) {
         </CardContent>
       </Card>
 
-      <Card className="bg-gradient-to-br from-amber-500 to-orange-600 text-white">
+      <Card className="border-2 border-amber-400 bg-gradient-to-br from-amber-500 to-orange-600 text-white shadow-md">
         <CardHeader className="pb-3">
           <CardTitle className="text-sm font-medium text-white/90">
             {t('balance')}

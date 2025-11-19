@@ -101,6 +101,7 @@ export async function grantPoints(userId: string, formData: FormData) {
       });
 
       revalidatePath("/admin/users");
+      revalidatePath("/dashboard");
       return { success: true, message: `Successfully granted ${points} points to ${result.updatedUser.name}.` };
 
     } else if (session.user.role === "facilitator") {
@@ -153,6 +154,7 @@ export async function grantPoints(userId: string, formData: FormData) {
       });
 
       revalidatePath("/admin/users");
+      revalidatePath("/dashboard");
       return { success: true, message: `Successfully granted ${points} points to ${result.updatedUser.name}.` };
 
     } else {
@@ -344,6 +346,7 @@ export async function editUserPoints(userId: string, formData: FormData) {
     });
 
     revalidatePath("/admin/users");
+    revalidatePath("/dashboard");
     return { success: true, message: `User points updated to ${points}.` };
   } catch (error) {
     console.error("Edit points error:", error);

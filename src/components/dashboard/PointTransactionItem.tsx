@@ -53,7 +53,7 @@ export function PointTransactionItem({ transaction }: PointTransactionItemProps)
   };
 
   return (
-    <div className="flex items-center gap-4 px-5 py-5 border-b last:border-0 hover:bg-gray-50 transition-colors">
+    <div className={`flex items-center gap-4 px-5 py-5 border-b border-l-4 last:border-b-0 hover:bg-gray-50 transition-colors ${isPositive ? 'border-l-green-500 bg-green-50/30' : 'border-l-red-500 bg-red-50/30'}`}>
       <div className="flex-shrink-0">
         {icon}
       </div>

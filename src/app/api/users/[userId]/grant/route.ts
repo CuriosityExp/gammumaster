@@ -5,6 +5,7 @@ import { PrismaClient, TransactionType } from "@/generated/prisma";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { z } from "zod";
+import { revalidatePath } from "next/cache";
 
 const prisma = new PrismaClient();
 
@@ -100,6 +101,8 @@ export async function POST(
 				return { updatedUser };
 			});
 
+			revalidatePath("/dashboard");
+
 			return NextResponse.json({
 				success: true,
 				message: `Successfully granted ${points} points to ${result.updatedUser.name}.`,
@@ -159,6 +162,8 @@ export async function POST(
 
 				return { updatedUser };
 			});
+
+			revalidatePath("/dashboard");
 
 			return NextResponse.json({
 				success: true,
