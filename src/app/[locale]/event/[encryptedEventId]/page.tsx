@@ -3,8 +3,28 @@ import { notFound, redirect } from "next/navigation";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { PrismaClient } from "@/generated/prisma";
+import type { Metadata } from "next";
+import { getTranslations } from "next-intl/server";
 
 const prisma = new PrismaClient();
+
+export async function generateMetadata({
+	params,
+}: {
+	params: Promise<{ encryptedEventId: string; locale: string }>;
+}): Promise<Metadata> {
+	const { encryptedEventId, locale } = await params;
+	const t = await getTranslations({ locale, namespace: 'eventScanner' });
+	
+	const event = await prisma.event.findUnique({
+		where: { eventId: encryptedEventId, deletedAt: null },
+		select: { title: true },
+	});
+
+	return {
+		title: event?.title || t('eventScanner'),
+	};
+}
 
 export default async function EventAttendancePage({
 	params,
@@ -56,6 +76,8 @@ export default async function EventAttendancePage({
 		notFound();
 	}
 
+	const t = await getTranslations({ locale, namespace: 'eventScanner' });
+
 	return (
 		<div className="container mx-auto p-6 max-w-2xl">
 			<div className="space-y-6">
@@ -68,12 +90,12 @@ export default async function EventAttendancePage({
 								<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M12 12h-4.01M12 12V8m0 4v4m4-4h4m-4 0V8m0 4v4" />
 							</svg>
 						</div>
-						<h1 className="text-3xl font-bold mb-2">Event Check-In</h1>
+						<h1 className="text-3xl font-bold mb-2">{t('eventCheckIn')}</h1>
 						<p className="text-blue-100 text-lg font-medium mb-1">
 							{event.title}
 						</p>
 						<p className="text-blue-200/80 text-sm">
-							Scan attendee QR code to check them in
+							{t('scanAttendeeQR')}
 						</p>
 					</div>
 				</div>

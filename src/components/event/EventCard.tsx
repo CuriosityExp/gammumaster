@@ -9,6 +9,7 @@ import { Calendar, Users, Coins, QrCode, Copy, ExternalLink } from "lucide-react
 import { toast } from "sonner";
 import { Badge } from "@/components/ui/badge";
 import { formatDate } from "@/lib/utils";
+import { useLocale, useTranslations } from "next-intl";
 
 interface EventCardProps {
 	readonly event: {
@@ -29,11 +30,13 @@ interface EventCardProps {
 }
 
 export function EventCard({ event, isAdminView = true }: EventCardProps) {
-	const eventUrl = `${globalThis.window === undefined ? "" : globalThis.window.location.origin}/event/${event.eventId}`;
+	const locale = useLocale();
+	const t = useTranslations('eventCard');
+	const eventUrl = `${globalThis.window === undefined ? "" : globalThis.window.location.origin}/${locale}/event/${event.eventId}`;
 
 	const copyEventLink = () => {
 		navigator.clipboard.writeText(eventUrl);
-		toast.success("Event link copied to clipboard!");
+		toast.success(t('linkCopied'));
 	};
 
 	const openEventPage = () => {
@@ -58,7 +61,7 @@ export function EventCard({ event, isAdminView = true }: EventCardProps) {
 						copyEventLink();
 					}}
 					className="absolute top-2 right-2 sm:top-3 sm:right-3 z-10 h-8 w-8 sm:h-9 sm:w-9 rounded-full shadow-md hover:shadow-lg bg-blue-500/10 hover:bg-blue-500/20 text-blue-700 dark:text-blue-300 border-blue-200 dark:border-blue-800 backdrop-blur-sm"
-					title="Copy event link"
+					title={t('copyEventLink')}
 				>
 					<Copy className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
 				</Button>
@@ -118,12 +121,12 @@ export function EventCard({ event, isAdminView = true }: EventCardProps) {
 							e.stopPropagation();
 							openEventPage();
 						}}
-						className="flex-1 min-w-0 h-9 text-sm sm:text-base px-2 sm:px-4 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white shadow-md hover:shadow-lg transition-all"
-						title="Open event scanner"
-					>
-						<QrCode className="h-4 w-4 shrink-0" />
-						<span className="hidden lg:inline mx-2 truncate">Scanner</span>
-						<span className="hidden sm:inline lg:hidden mx-1 truncate">Open</span>
+					className="flex-1 min-w-0 h-9 text-sm sm:text-base px-2 sm:px-4 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white shadow-md hover:shadow-lg transition-all"
+					title={t('openScanner')}
+				>
+					<QrCode className="h-4 w-4 shrink-0" />
+					<span className="hidden lg:inline mx-2 truncate">{t('scanner')}</span>
+					<span className="hidden sm:inline lg:hidden mx-1 truncate">{t('open')}</span>
 						<ExternalLink className="ml-auto h-3.5 w-3.5 shrink-0 hidden lg:inline" />
 					</Button>
 					{isAdminView && (

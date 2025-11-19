@@ -1,5 +1,5 @@
 import { AdminMenuCard } from "@/components/admin/AdminMenuCard";
-import { Gift, Calendar, Users, User, Shield } from "lucide-react";
+import { Gift, Calendar, Users, User, Shield, QrCode } from "lucide-react";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { redirect } from "next/navigation";
@@ -120,6 +120,18 @@ export default async function AdminDashboard({
 								iconBgColor="bg-green-500/10"
 								iconHoverBgColor="group-hover:bg-green-500/20"
 								hoverBorderColor="hover:border-green-500"
+							/>
+						</div>
+						<div className="relative group hover:scale-105 transition-transform duration-200">
+							<div className="absolute inset-0 bg-gradient-to-br from-violet-500/10 to-fuchsia-500/10 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" />
+						<AdminMenuCard
+							title={t('scanToGrant')}
+							description={t('scanToGrantDesc')}
+							icon={<QrCode className="h-8 w-8 text-violet-500" />}
+							href={`/${locale}/admin/scan-grant`}
+								iconBgColor="bg-violet-500/10"
+								iconHoverBgColor="group-hover:bg-violet-500/20"
+								hoverBorderColor="hover:border-violet-500"
 							/>
 						</div>
 					</>
