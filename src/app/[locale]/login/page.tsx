@@ -17,7 +17,7 @@ export default async function UserLoginPage({
       redirect(`/${locale}/admin`);
     }
     if (session.user.role === "user") {
-      redirect(`/${locale}/profile`);
+      redirect(`/${locale}/dashboard/profile`);
     }
   }
 

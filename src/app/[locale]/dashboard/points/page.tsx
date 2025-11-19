@@ -22,8 +22,8 @@ import Link from "next/link";
 function TransactionsListSkeleton() {
   return (
     <div className="space-y-4">
-      {Array.from({ length: 10 }).map((_, i) => (
-        <div key={`skeleton-${i}`} className="h-20 bg-gray-200 animate-pulse rounded-lg" />
+      {Array.from({ length: 10 }, (_, i) => `skeleton-item-${i}`).map((key) => (
+        <div key={key} className="h-20 bg-gray-200 animate-pulse rounded-lg" />
       ))}
     </div>
   );
@@ -49,14 +49,17 @@ async function TransactionsList({
 
   if (transactions.length === 0) {
     return (
-      <div className="text-center py-12 bg-white rounded-lg border">
-        <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gray-100 mb-4">
-          <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <div className="text-center py-16 bg-white rounded-lg border-2 border-dashed border-gray-300">
+        <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-gray-100 mb-5">
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
           </svg>
         </div>
-        <p className="text-lg font-medium text-muted-foreground">
+        <p className="text-lg font-semibold text-gray-900 mb-1">
           {t('noTransactions')}
+        </p>
+        <p className="text-sm text-muted-foreground max-w-sm mx-auto">
+          Your transaction history will appear here once you earn or spend points
         </p>
       </div>
     );
@@ -75,10 +78,18 @@ async function TransactionsList({
           <Pagination>
             <PaginationContent>
               <PaginationItem>
-                <PaginationPrevious 
-                  href={currentPage > 1 ? `/${locale}/dashboard/points?page=${currentPage - 1}${filterType ? `&type=${filterType}` : ''}` : '#'}
-                  className={currentPage <= 1 ? 'pointer-events-none opacity-50' : ''}
-                />
+                {(() => {
+                  const typeParam = filterType ? `&type=${filterType}` : '';
+                  const prevHref = currentPage > 1 
+                    ? `/${locale}/dashboard/points?page=${currentPage - 1}${typeParam}`
+                    : '#';
+                  return (
+                    <PaginationPrevious 
+                      href={prevHref}
+                      className={currentPage <= 1 ? 'pointer-events-none opacity-50' : ''}
+                    />
+                  );
+                })()}
               </PaginationItem>
               
               {Array.from({ length: totalPages }, (_, i) => {
@@ -158,24 +169,24 @@ export default async function PointHistoryPage({
 
       <PointSummaryCard summary={summary} />
 
-      <div className="mb-4 flex gap-2">
+      <div className="mb-6 flex flex-wrap gap-3">
         <Link href={`/${locale}/dashboard/points`}>
-          <button className={`px-4 py-2 rounded-lg border ${filterType ? 'bg-white' : 'bg-primary text-primary-foreground'}`}>
+          <button className={`px-5 py-2.5 rounded-lg border-2 font-medium transition-all hover:shadow-sm ${filterType ? 'bg-white border-gray-300 text-gray-700 hover:border-gray-400' : 'bg-primary border-primary text-primary-foreground shadow-md'}`}>
             {t('allTypes')}
           </button>
         </Link>
         <Link href={`/${locale}/dashboard/points?type=ADMIN_GRANT`}>
-          <button className={`px-4 py-2 rounded-lg border ${filterType === 'ADMIN_GRANT' ? 'bg-primary text-primary-foreground' : 'bg-white'}`}>
+          <button className={`px-5 py-2.5 rounded-lg border-2 font-medium transition-all hover:shadow-sm ${filterType === 'ADMIN_GRANT' ? 'bg-primary border-primary text-primary-foreground shadow-md' : 'bg-white border-gray-300 text-gray-700 hover:border-gray-400'}`}>
             {t('transactionType.ADMIN_GRANT')}
           </button>
         </Link>
         <Link href={`/${locale}/dashboard/points?type=EVENT_TOPUP`}>
-          <button className={`px-4 py-2 rounded-lg border ${filterType === 'EVENT_TOPUP' ? 'bg-primary text-primary-foreground' : 'bg-white'}`}>
+          <button className={`px-5 py-2.5 rounded-lg border-2 font-medium transition-all hover:shadow-sm ${filterType === 'EVENT_TOPUP' ? 'bg-primary border-primary text-primary-foreground shadow-md' : 'bg-white border-gray-300 text-gray-700 hover:border-gray-400'}`}>
             {t('transactionType.EVENT_TOPUP')}
           </button>
         </Link>
         <Link href={`/${locale}/dashboard/points?type=PRIZE_REDEEM`}>
-          <button className={`px-4 py-2 rounded-lg border ${filterType === 'PRIZE_REDEEM' ? 'bg-primary text-primary-foreground' : 'bg-white'}`}>
+          <button className={`px-5 py-2.5 rounded-lg border-2 font-medium transition-all hover:shadow-sm ${filterType === 'PRIZE_REDEEM' ? 'bg-primary border-primary text-primary-foreground shadow-md' : 'bg-white border-gray-300 text-gray-700 hover:border-gray-400'}`}>
             {t('transactionType.PRIZE_REDEEM')}
           </button>
         </Link>

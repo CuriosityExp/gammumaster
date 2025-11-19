@@ -53,36 +53,38 @@ export function PointTransactionItem({ transaction }: PointTransactionItemProps)
   };
 
   return (
-    <div className="flex items-center gap-4 py-4 border-b last:border-0">
-      {icon}
+    <div className="flex items-center gap-4 px-5 py-5 border-b last:border-0 hover:bg-gray-50 transition-colors">
+      <div className="flex-shrink-0">
+        {icon}
+      </div>
       <div className="flex-1 min-w-0">
-        <div className="flex items-center gap-2">
-          <p className="font-medium text-sm">
+        <div className="flex items-start gap-2 mb-1">
+          <p className="font-semibold text-sm">
             {t(`transactionType.${transaction.type}`)}
           </p>
-          <span className="text-xs text-muted-foreground">
-            {new Date(transaction.createdAt).toLocaleString(undefined, {
-              year: 'numeric',
-              month: 'short',
-              day: 'numeric',
-              hour: '2-digit',
-              minute: '2-digit'
-            })}
-          </span>
+        </div>
+        <div className="text-xs text-muted-foreground mb-1">
+          {new Date(transaction.createdAt).toLocaleString(undefined, {
+            year: 'numeric',
+            month: 'short',
+            day: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit'
+          })}
         </div>
         {transaction.description && (
-          <p className="text-sm text-muted-foreground truncate">
+          <p className="text-sm text-muted-foreground line-clamp-2 mt-1">
             {transaction.description}
           </p>
         )}
         {getSource() && (
-          <p className="text-xs text-muted-foreground mt-1">
+          <p className="text-xs text-muted-foreground mt-1.5 italic">
             {getSource()}
           </p>
         )}
       </div>
-      <div className={`text-lg font-bold tabular-nums ${isPositive ? 'text-green-600' : 'text-red-600'}`}>
-        {isPositive ? '+' : ''}{transaction.amount.toLocaleString()}
+      <div className={`text-xl font-bold tabular-nums flex-shrink-0 ml-2 ${isPositive ? 'text-green-600' : 'text-red-600'}`}>
+        {isPositive ? '+'  : ''}{transaction.amount.toLocaleString()}
       </div>
     </div>
   );

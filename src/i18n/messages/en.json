@@ -64,6 +64,7 @@
     "eventScannerDesc": "View events and access QR scanner for check-ins",
     "userManagement": "User Management",
     "userManagementDesc": "View users and manage their points",
+    "grantPoints": "Grant Points",
     "grantPointsDesc": "Grant points to users from your balance",
     "facilitatorManagement": "Facilitator Management",
     "facilitatorManagementDesc": "Manage facilitator accounts and permissions",

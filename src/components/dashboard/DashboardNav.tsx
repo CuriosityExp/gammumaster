@@ -1,6 +1,7 @@
 "use client";
 
-import { usePathname, useLocale, useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
+import { usePathname } from "next/navigation";
 import Link from "next/link";
 
 export function DashboardNav() {
@@ -39,21 +40,23 @@ export function DashboardNav() {
   ];
 
   return (
-    <nav className="space-y-1">
+    <nav className="lg:space-y-1 flex lg:flex-col gap-1 lg:gap-0">
       {navItems.map((item) => {
         const isActive = pathname === item.href;
         return (
           <Link
             key={item.href}
             href={item.href}
-            className={`flex items-center gap-3 px-3 py-2 rounded-lg transition-colors ${
+            className={`flex items-center justify-center lg:justify-start gap-2 lg:gap-3 px-3 py-2 rounded-lg transition-colors flex-1 lg:flex-initial ${
               isActive
-                ? 'bg-primary text-primary-foreground'
+                ? 'bg-primary text-primary-foreground shadow-sm'
                 : 'text-muted-foreground hover:bg-accent hover:text-accent-foreground'
             }`}
           >
-            {item.icon}
-            <span className="font-medium">{item.label}</span>
+            <div className="flex-shrink-0">
+              {item.icon}
+            </div>
+            <span className="font-medium text-xs lg:text-sm">{item.label}</span>
           </Link>
         );
       })}

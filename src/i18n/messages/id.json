@@ -64,6 +64,7 @@
     "eventScannerDesc": "Lihat acara dan akses scanner QR untuk check-in",
     "userManagement": "Manajemen Pengguna",
     "userManagementDesc": "Lihat pengguna dan kelola poin mereka",
+    "grantPoints": "Berikan Poin",
     "grantPointsDesc": "Berikan poin kepada pengguna dari saldo Anda",
     "facilitatorManagement": "Manajemen Fasilitator",
     "facilitatorManagementDesc": "Kelola akun dan izin fasilitator",

@@ -31,7 +31,7 @@ export function UserLoginForm() {
 
     if (res?.ok) {
       toast.success(t('loginSuccess'));
-      router.push(`/${locale}/profile`); // Redirect to the user profile page
+      router.push(`/${locale}/dashboard/profile`);
     } else {
       toast.error(t('loginFailed'));
       setError(t('invalidQR'));
