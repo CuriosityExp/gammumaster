@@ -153,7 +153,16 @@
     "createdSuccess": "Prize created successfully",
     "updatedSuccess": "Prize updated successfully",
     "deletedSuccess": "Prize deleted successfully",
-    "pointsRequired": "{points} pts"
+    "pointsRequired": "{points} pts",
+    "stockAvailable": "Available",
+    "outOfStock": "Out of Stock",
+    "lowStock": "Low Stock",
+    "createPrizeDesc": "Add the details for the new prize. Click save when you're done.",
+    "editPrize": "Edit Prize",
+    "editPrizeDesc": "Make changes to your prize here. Click save when you're done.",
+    "saveChanges": "Save Changes",
+    "editSuccess": "Prize updated successfully!",
+    "saving": "Saving..."
   },
   "events": {
     "title": "Event Management",
