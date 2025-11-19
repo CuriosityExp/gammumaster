@@ -13,6 +13,7 @@ import { Button } from "@/components/ui/button";
 import { LogOut, Settings, User } from "lucide-react";
 import { signOut } from "next-auth/react";
 import Link from "next/link";
+import { useLocale } from "next-intl";
 
 interface AccountDropdownProps {
   readonly email: string | null | undefined;
@@ -21,8 +22,9 @@ interface AccountDropdownProps {
 }
 
 export function AccountDropdown({ email, availablePoints, role }: AccountDropdownProps) {
+  const locale = useLocale();
   const handleLogout = async () => {
-    await signOut({ callbackUrl: "/admin/login" });
+    await signOut({ callbackUrl: `/${locale}/admin/login` });
   };
 
   return (
@@ -41,13 +43,13 @@ export function AccountDropdown({ email, availablePoints, role }: AccountDropdow
         <DropdownMenuLabel>My Account</DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuItem asChild>
-          <Link href="/admin/account" className="cursor-pointer">
+          <Link href={`/${locale}/admin/account`} className="cursor-pointer">
             <Settings className="mr-2 h-4 w-4" />
             <span>Account Settings</span>
           </Link>
         </DropdownMenuItem>
         <DropdownMenuItem asChild>
-          <Link href="/admin" className="cursor-pointer">
+          <Link href={`/${locale}/admin`} className="cursor-pointer">
             <User className="mr-2 h-4 w-4" />
             <span>Dashboard</span>
           </Link>

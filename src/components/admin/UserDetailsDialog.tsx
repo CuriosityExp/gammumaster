@@ -10,7 +10,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { getUserDetails } from "@/app/admin/users/actions";
+import { getUserDetails } from "@/app/[locale]/admin/users/actions";
 import { toast } from "sonner";
 import { useState, useEffect } from "react";
 import { Eye, Calendar, Gift, TrendingUp } from "lucide-react";
@@ -192,3 +192,4 @@ export function UserDetailsDialog({ userId, userName }: UserDetailsDialogProps) 
     </Dialog>
   );
 }
+

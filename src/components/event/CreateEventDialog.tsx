@@ -14,7 +14,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { createEvent } from "@/app/admin/events/actions";
+import { createEvent } from "@/app/[locale]/admin/events/actions";
 import { toast } from "sonner";
 import { Plus } from "lucide-react";
 
@@ -109,3 +109,4 @@ export function CreateEventDialog() {
 		</Dialog>
 	);
 }
+

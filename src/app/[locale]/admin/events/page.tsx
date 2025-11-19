@@ -4,6 +4,7 @@ import { EventCard } from "@/components/event/EventCard";
 import { SearchInput } from "@/components/admin/SearchInput";
 import { CardGridSkeleton } from "@/components/admin/CardGridSkeleton";
 import { Suspense } from "react";
+import { getTranslations } from "next-intl/server";
 import {
 	Pagination,
 	PaginationContent,
@@ -19,21 +20,25 @@ import { redirect } from "next/navigation";
 
 export default async function AdminEventsPage({
 	searchParams,
+	params,
 }: Readonly<{
 	searchParams: Promise<{ search?: string; page?: string }>;
+	params: Promise<{ locale: string }>;
 }>) {
+	const { locale } = await params;
 	const session = await getServerSession(authOptions);
 
 	if (!session?.user?.role || (session.user.role !== "admin" && session.user.role !== "facilitator")) {
-		redirect("/admin/login");
+		redirect(`/${locale}/admin/login`);
 	}
 
 	const isAdmin = session.user.role === "admin";
 	const isFacilitator = session.user.role === "facilitator";
 
-	const params = await searchParams;
-	const searchQuery = params.search || "";
-	const currentPage = Number(params.page) || 1;
+	const searchParamsResolved = await searchParams;
+	const searchQuery = searchParamsResolved.search || "";
+	const currentPage = Number(searchParamsResolved.page) || 1;
+	const t = await getTranslations('events');
 
 	return (
 		<div className="container mx-auto p-6">
@@ -47,14 +52,14 @@ export default async function AdminEventsPage({
 						</div>
 						<div>
 							<h1 className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
-								{isFacilitator ? "Event Scanner Access" : "Event Management"}
+								{isFacilitator ? t('scannerAccess') : t('title')}
 							</h1>
 						</div>
 					</div>
 					<p className="text-muted-foreground ml-15">
 						{isFacilitator 
-							? "View events and access QR scanner for check-ins"
-							: "Create and manage events for user check-ins"
+							? t('viewEventsDesc')
+							: t('manageEventsDesc')
 						}
 					</p>
 				</div>
@@ -66,8 +71,8 @@ export default async function AdminEventsPage({
 			<div className="mb-6">
 				<div className="max-w-md">
 					<SearchInput 
-						placeholder="Search events by title or description..." 
-						basePath="/admin/events"
+						placeholder={t('searchPlaceholder')}
+						basePath={`/${locale}/admin/events`}
 					/>
 				</div>
 			</div>
@@ -78,6 +83,7 @@ export default async function AdminEventsPage({
 					currentPage={currentPage}
 					isAdmin={isAdmin}
 					isFacilitator={isFacilitator}
+					locale={locale}
 				/>
 			</Suspense>
 		</div>
@@ -89,13 +95,16 @@ async function EventsGrid({
 	currentPage,
 	isAdmin,
 	isFacilitator,
+	locale,
 }: Readonly<{
 	searchQuery: string;
 	currentPage: number;
 	isAdmin: boolean;
 	isFacilitator: boolean;
+	locale: string;
 }>) {
 	const result = await getAllEvents(searchQuery, currentPage);
+	const t = await getTranslations('events');
 
 	// Handle both paginated and non-paginated responses
 	const events = Array.isArray(result) ? result : result.events;
@@ -104,9 +113,9 @@ async function EventsGrid({
 
 	// Determine empty state message
 	const getEmptyMessage = () => {
-		if (searchQuery) return "No events found matching your search";
-		if (isFacilitator) return "No events available";
-		return "No events yet. Create your first event!";
+		if (searchQuery) return t('noResults');
+		if (isFacilitator) return t('noEventsAvailable');
+		return t('noEvents');
 	};
 
 	return (
@@ -132,7 +141,7 @@ async function EventsGrid({
 						<PaginationContent>
 							<PaginationItem>
 								<PaginationPrevious 
-									href={currentPage > 1 ? `/admin/events?page=${currentPage - 1}&search=${searchQuery}` : '#'}
+									href={currentPage > 1 ? `/${locale}/admin/events?page=${currentPage - 1}&search=${searchQuery}` : '#'}
 									className={currentPage <= 1 ? 'pointer-events-none opacity-50' : ''}
 									size="default"
 								/>
@@ -140,7 +149,7 @@ async function EventsGrid({
 							
 							{Array.from({ length: totalPages }, (_, i) => {
 								const pageNum = i + 1;
-								const pageUrl = `/admin/events?page=${pageNum}&search=${searchQuery}`;
+								const pageUrl = `/${locale}/admin/events?page=${pageNum}&search=${searchQuery}`;
 								// Show first page, last page, current page, and pages around current
 								if (
 									pageNum === 1 ||
@@ -169,7 +178,7 @@ async function EventsGrid({
 
 							<PaginationItem>
 								<PaginationNext 
-									href={currentPage < totalPages ? `/admin/events?page=${currentPage + 1}&search=${searchQuery}` : '#'}
+									href={currentPage < totalPages ? `/${locale}/admin/events?page=${currentPage + 1}&search=${searchQuery}` : '#'}
 									className={currentPage >= totalPages ? 'pointer-events-none opacity-50' : ''}
 									size="default"
 								/>
@@ -178,7 +187,7 @@ async function EventsGrid({
 					</Pagination>
 					
 					<p className="text-center text-sm text-muted-foreground mt-2">
-						Showing {events.length} of {totalCount} events
+						{t('showing', { count: events.length, total: totalCount })}
 					</p>
 				</div>
 			)}

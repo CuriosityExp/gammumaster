@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { updateFacilitator } from "@/app/admin/facilitators/actions";
+import { updateFacilitator } from "@/app/[locale]/admin/facilitators/actions";
 import { toast } from "sonner";
 import { useState } from "react";
 import { Pencil } from "lucide-react";
@@ -93,3 +93,4 @@ export function EditFacilitatorDialog({ facilitatorId, userName, currentPoints }
     </Dialog>
   );
 }
+

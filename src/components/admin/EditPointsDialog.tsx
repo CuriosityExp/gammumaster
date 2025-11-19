@@ -14,7 +14,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { editUserPoints } from "@/app/admin/users/actions";
+import { editUserPoints } from "@/app/[locale]/admin/users/actions";
 import { toast } from "sonner";
 import { useState } from "react";
 import { Coins } from "lucide-react";
@@ -105,3 +105,4 @@ export function EditPointsDialog({ userId, userName, currentPoints }: EditPoints
     </Dialog>
   );
 }
+

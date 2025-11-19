@@ -8,6 +8,8 @@ import { QRCodeCanvas } from "qrcode.react";
 import { Button } from "@/components/ui/button";
 import { useRef } from "react";
 import { SignOutButton } from "@/components/auth/SignOutButton";
+import { useTranslations } from "next-intl";
+import { EditProfileDialog } from "@/components/dashboard/EditProfileDialog";
 
 interface UserProfileCardProps {
  readonly user: User;
@@ -15,6 +17,7 @@ interface UserProfileCardProps {
 
 export function UserProfileCard({ user }: UserProfileCardProps) {
   const qrRef = useRef<HTMLDivElement>(null);
+  const t = useTranslations('profile');
 
   const handleDownload = () => {
     // This is the same download logic from the admin page
@@ -53,19 +56,20 @@ export function UserProfileCard({ user }: UserProfileCardProps) {
       </CardHeader>
       <CardContent className="flex flex-col items-center gap-6">
         <div className="text-center">
-          <p className="text-sm text-muted-foreground">Your Points Balance</p>
+          <p className="text-sm text-muted-foreground">{t('myPoints')}</p>
           <p className="text-5xl font-bold tracking-tighter">{user.points.toLocaleString()}</p>
         </div>
 
         <div className="text-center p-4 border rounded-lg">
-            <p className="text-sm text-muted-foreground mb-2">Your Personal QR Code</p>
+            <p className="text-sm text-muted-foreground mb-2">{t('qrCode')}</p>
             <div ref={qrRef} className="p-4 bg-white rounded-md">
                 <QRCodeCanvas value={user.qrCodeIdentifier} size={200} />
             </div>
         </div>
 
         <div className="w-full flex flex-col gap-3">
-            <Button onClick={handleDownload} className="w-full">Download QR Code</Button>
+            <EditProfileDialog user={user} />
+            <Button onClick={handleDownload} className="w-full">{t('downloadQR')}</Button>
             <SignOutButton />
         </div>
       </CardContent>

@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { updateUser } from "@/app/admin/users/actions";
+import { updateUser } from "@/app/[locale]/admin/users/actions";
 import { toast } from "sonner";
 import { useState } from "react";
 import { Pencil } from "lucide-react";
@@ -103,3 +103,4 @@ export function EditUserDialog({ userId, userName, userEmail }: EditUserDialogPr
     </Dialog>
   );
 }
+

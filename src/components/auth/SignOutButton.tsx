@@ -3,14 +3,18 @@
 
 import { Button } from "@/components/ui/button";
 import { signOut } from "next-auth/react";
+import { useTranslations, useLocale } from "next-intl";
 
 export function SignOutButton() {
+  const t = useTranslations('auth');
+  const locale = useLocale();
+  
   return (
     <Button 
       variant="outline" 
-      onClick={() => signOut({ callbackUrl: '/login' })}
+      onClick={() => signOut({ callbackUrl: `/${locale}/login` })}
     >
-      Sign Out
+      {t('logout')}
     </Button>
   );
 }

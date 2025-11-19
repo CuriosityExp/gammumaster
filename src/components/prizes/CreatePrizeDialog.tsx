@@ -16,7 +16,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { createPrize } from "@/app/admin/prizes/actions";
+import { createPrize } from "@/app/[locale]/admin/prizes/actions";
 import { useRef } from "react";
 
 export function CreatePrizeDialog() {

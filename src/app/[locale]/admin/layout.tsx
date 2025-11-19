@@ -5,6 +5,9 @@ import { getServerSession } from "next-auth";
 import Link from "next/link";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { AccountDropdown } from "@/components/admin/AccountDropdown";
+import { LanguageSwitcher } from "@/components/LanguageSwitcher";
+
+export const dynamic = 'force-dynamic';
 
 const prisma = new PrismaClient();
 
@@ -32,26 +35,32 @@ async function getAdminData() {
 
 export default async function AdminLayout({
   children,
-}: {
-  readonly children: React.ReactNode;
-}) {
+  params,
+}: Readonly<{
+  children: React.ReactNode;
+  params: Promise<{ locale: string }>;
+}>) {
+  const { locale } = await params;
   const adminData = await getAdminData();
 
   return (
     <div>
       <header className="border-b">
         <div className="container mx-auto flex h-16 items-center justify-between p-8">
-          <Link href="/admin" className="hover:underline">
+          <Link href={`/${locale}/admin`} className="hover:underline">
             <h2 className="text-lg font-semibold">
               {adminData?.type === "facilitator" ? "Facilitator" : "Admin"} Dashboard
             </h2>
           </Link>
           {adminData && (
-            <AccountDropdown
-              email={adminData.type === "admin" ? adminData.data?.email : adminData.data?.user.email}
-              availablePoints={adminData.data?.availablePointsToGrant}
-              role={adminData.type}
-            />
+            <div className="flex items-center gap-4">
+              <LanguageSwitcher />
+              <AccountDropdown
+                email={adminData.type === "admin" ? adminData.data?.email : adminData.data?.user.email}
+                availablePoints={adminData.data?.availablePointsToGrant}
+                role={adminData.type}
+              />
+            </div>
           )}
         </div>
       </header>

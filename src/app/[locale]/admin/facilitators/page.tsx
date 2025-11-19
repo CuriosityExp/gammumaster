@@ -6,6 +6,7 @@ import { FacilitatorDetailsDialog } from "@/components/facilitators/FacilitatorD
 import { SearchInput } from "@/components/admin/SearchInput";
 import { TableSkeleton } from "@/components/admin/TableSkeleton";
 import { Suspense } from "react";
+import { getTranslations } from "next-intl/server";
 import {
   Table,
   TableBody,
@@ -69,19 +70,22 @@ async function getFacilitators(searchQuery: string, page: number) {
 
 export default async function AdminFacilitatorsPage({
   searchParams,
+  params: paramsPromise,
 }: Readonly<{
   searchParams: Promise<{ search?: string; page?: string }>;
+  params: Promise<{ locale: string }>;
 }>) {
+  const [searchParamsResolved, { locale }] = await Promise.all([searchParams, paramsPromise]);
   const session = await getServerSession(authOptions);
 
   // Only admins can access this page
   if (!session?.user?.email || session.user.role !== "admin") {
-    redirect("/admin/login");
+    redirect(`/${locale}/admin/login`);
   }
 
-  const params = await searchParams;
-  const searchQuery = params.search || "";
-  const currentPage = Number(params.page) || 1;
+  const searchQuery = searchParamsResolved.search || "";
+  const currentPage = Number(searchParamsResolved.page) || 1;
+  const t = await getTranslations('facilitators');
 
   return (
     <div className="container mx-auto p-8">
@@ -95,12 +99,12 @@ export default async function AdminFacilitatorsPage({
             </div>
             <div>
               <h1 className="text-4xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
-                Manage Facilitators
+                {t('title')}
               </h1>
             </div>
           </div>
           <p className="text-muted-foreground ml-15">
-            Create and manage facilitator accounts with limited admin privileges
+            {t('description')}
           </p>
         </div>
         <CreateFacilitatorDialog />
@@ -109,13 +113,13 @@ export default async function AdminFacilitatorsPage({
       {/* Search Bar */}
       <div className="mb-4">
         <SearchInput 
-          placeholder="Search by name or email..." 
-          basePath="/admin/facilitators"
+          placeholder={t('searchPlaceholder')}
+          basePath={`/${locale}/admin/facilitators`}
         />
       </div>
 
       <Suspense key={`${searchQuery}-${currentPage}`} fallback={<TableSkeleton rows={10} columns={5} />}>
-        <FacilitatorsTable searchQuery={searchQuery} currentPage={currentPage} />
+        <FacilitatorsTable searchQuery={searchQuery} currentPage={currentPage} locale={locale} />
       </Suspense>
     </div>
   );
@@ -123,12 +127,16 @@ export default async function AdminFacilitatorsPage({
 
 async function FacilitatorsTable({ 
   searchQuery, 
-  currentPage 
+  currentPage,
+  locale,
 }: Readonly<{
   searchQuery: string;
   currentPage: number;
+  locale: string;
 }>) {
   const { facilitators, totalCount, totalPages } = await getFacilitators(searchQuery, currentPage);
+  const t = await getTranslations('facilitators');
+  const tCommon = await getTranslations('common');
 
   return (
     <>
@@ -136,18 +144,18 @@ async function FacilitatorsTable({
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead>Name</TableHead>
-              <TableHead>Email</TableHead>
-              <TableHead className="text-right">Available Points</TableHead>
-              <TableHead className="text-right">Created</TableHead>
-              <TableHead className="text-right">Actions</TableHead>
+              <TableHead>{tCommon('name')}</TableHead>
+              <TableHead>{tCommon('email')}</TableHead>
+              <TableHead className="text-right">{t('availablePoints')}</TableHead>
+              <TableHead className="text-right">{t('created')}</TableHead>
+              <TableHead className="text-right">{tCommon('actions')}</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {facilitators.length === 0 ? (
               <TableRow>
                 <TableCell colSpan={5} className="text-center text-muted-foreground py-8">
-                  {searchQuery ? "No facilitators found matching your search" : "No facilitators yet. Create one to get started."}
+                  {searchQuery ? t('noResults') : t('noFacilitators')}
                 </TableCell>
               </TableRow>
             ) : (
@@ -192,7 +200,7 @@ async function FacilitatorsTable({
             <PaginationContent>
               <PaginationItem>
                 <PaginationPrevious 
-                  href={currentPage > 1 ? `/admin/facilitators?page=${currentPage - 1}&search=${searchQuery}` : '#'}
+                  href={currentPage > 1 ? `/${locale}/admin/facilitators?page=${currentPage - 1}&search=${searchQuery}` : '#'}
                   className={currentPage <= 1 ? 'pointer-events-none opacity-50' : ''}
                   size="default"
                 />
@@ -200,7 +208,7 @@ async function FacilitatorsTable({
               
               {Array.from({ length: totalPages }, (_, i) => {
                 const pageNum = i + 1;
-                const pageUrl = `/admin/facilitators?page=${pageNum}&search=${searchQuery}`;
+                const pageUrl = `/${locale}/admin/facilitators?page=${pageNum}&search=${searchQuery}`;
                 // Show first page, last page, current page, and pages around current
                 if (
                   pageNum === 1 ||
@@ -229,7 +237,7 @@ async function FacilitatorsTable({
 
               <PaginationItem>
                 <PaginationNext 
-                  href={currentPage < totalPages ? `/admin/facilitators?page=${currentPage + 1}&search=${searchQuery}` : '#'}
+                  href={currentPage < totalPages ? `/${locale}/admin/facilitators?page=${currentPage + 1}&search=${searchQuery}` : '#'}
                   className={currentPage >= totalPages ? 'pointer-events-none opacity-50' : ''}
                   size="default"
                 />
@@ -238,7 +246,7 @@ async function FacilitatorsTable({
           </Pagination>
           
           <p className="text-center text-sm text-muted-foreground mt-2">
-            Showing {facilitators.length} of {totalCount} facilitators
+            {tCommon('showing', { count: facilitators.length, total: totalCount })}
           </p>
         </div>
       )}

@@ -7,6 +7,7 @@ import { DeleteUserAlert } from "@/components/admin/DeleteUserAlert";
 import { UserDetailsDialog } from "@/components/admin/UserDetailsDialog";
 import { SearchInput } from "@/components/admin/SearchInput";
 import { TableSkeleton } from "@/components/admin/TableSkeleton";
+import { getTranslations } from "next-intl/server";
 import {
   Table,
   TableBody,
@@ -83,17 +84,20 @@ async function getGranterData() {
 
 export default async function AdminUsersPage({
   searchParams,
+  params: paramsPromise,
 }: Readonly<{
   searchParams: Promise<{ search?: string; page?: string }>;
+  params: Promise<{ locale: string }>;
 }>) {
-  const params = await searchParams;
-  const searchQuery = params.search || "";
-  const currentPage = Number(params.page) || 1;
+  const [searchParamsResolved, { locale }] = await Promise.all([searchParams, paramsPromise]);
+  const searchQuery = searchParamsResolved.search || "";
+  const currentPage = Number(searchParamsResolved.page) || 1;
+  const t = await getTranslations('users');
 
   const granterData = await getGranterData();
 
   if (!granterData) {
-    redirect("/admin/login");
+    redirect(`/${locale}/admin/login`);
   }
 
   const availablePoints = granterData.data?.availablePointsToGrant || 0;
@@ -111,12 +115,12 @@ export default async function AdminUsersPage({
             </div>
             <div>
               <h1 className="text-4xl font-bold bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent">
-                Manage Users
+                {t('title')}
               </h1>
             </div>
           </div>
           <p className="text-muted-foreground ml-15">
-            Available points to grant: <span className="font-semibold text-green-600 dark:text-green-400">{availablePoints.toLocaleString()}</span>
+            {t('availablePoints', { points: availablePoints.toLocaleString() })}
           </p>
         </div>
         <CreateUserDialog />
@@ -125,8 +129,8 @@ export default async function AdminUsersPage({
       {/* Search Bar */}
       <div className="mb-4">
         <SearchInput 
-          placeholder="Search by name or email..." 
-          basePath="/admin/users"
+          placeholder={t('searchPlaceholder')}
+          basePath={`/${locale}/admin/users`}
         />
       </div>
 
@@ -137,6 +141,7 @@ export default async function AdminUsersPage({
           isAdmin={isAdmin}
           availablePoints={availablePoints}
           granterRole={granterData.role}
+          locale={locale}
         />
       </Suspense>
     </div>
@@ -149,14 +154,17 @@ async function UsersTable({
   isAdmin,
   availablePoints,
   granterRole,
+  locale,
 }: Readonly<{
   searchQuery: string;
   currentPage: number;
   isAdmin: boolean;
   availablePoints: number;
   granterRole: "admin" | "facilitator";
+  locale: string;
 }>) {
   const { users, totalCount, totalPages } = await getUsers(searchQuery, currentPage);
+  const t = await getTranslations('users');
 
   return (
     <>
@@ -164,17 +172,17 @@ async function UsersTable({
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead>Name</TableHead>
-              <TableHead>Email</TableHead>
-              <TableHead className="text-right">Points</TableHead>
-              <TableHead className="text-right">Actions</TableHead>
+              <TableHead>{t('name')}</TableHead>
+              <TableHead>{t('email')}</TableHead>
+              <TableHead className="text-right">{t('points')}</TableHead>
+              <TableHead className="text-right">{t('actions')}</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {users.length === 0 ? (
               <TableRow>
                 <TableCell colSpan={4} className="text-center py-8 text-muted-foreground">
-                  {searchQuery ? "No users found matching your search" : "No users yet"}
+                  {searchQuery ? t('noResults') : t('noUsers')}
                 </TableCell>
               </TableRow>
             ) : (
@@ -229,7 +237,7 @@ async function UsersTable({
             <PaginationContent>
               <PaginationItem>
                 <PaginationPrevious 
-                  href={currentPage > 1 ? `/admin/users?page=${currentPage - 1}&search=${searchQuery}` : '#'}
+                  href={currentPage > 1 ? `/${locale}/admin/users?page=${currentPage - 1}&search=${searchQuery}` : '#'}
                   className={currentPage <= 1 ? 'pointer-events-none opacity-50' : ''}
                   size="default"
                 />
@@ -237,7 +245,7 @@ async function UsersTable({
               
               {Array.from({ length: totalPages }, (_, i) => {
                 const pageNum = i + 1;
-                const pageUrl = `/admin/users?page=${pageNum}&search=${searchQuery}`;
+                const pageUrl = `/${locale}/admin/users?page=${pageNum}&search=${searchQuery}`;
                 // Show first page, last page, current page, and pages around current
                 if (
                   pageNum === 1 ||
@@ -266,7 +274,7 @@ async function UsersTable({
 
               <PaginationItem>
                 <PaginationNext 
-                  href={currentPage < totalPages ? `/admin/users?page=${currentPage + 1}&search=${searchQuery}` : '#'}
+                  href={currentPage < totalPages ? `/${locale}/admin/users?page=${currentPage + 1}&search=${searchQuery}` : '#'}
                   className={currentPage >= totalPages ? 'pointer-events-none opacity-50' : ''}
                   size="default"
                 />

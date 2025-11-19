@@ -13,7 +13,7 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
-import { deleteUser } from "@/app/admin/users/actions";
+import { deleteUser } from "@/app/[locale]/admin/users/actions";
 import { toast } from "sonner";
 import { Trash2 } from "lucide-react";
 import { useState } from "react";
@@ -69,3 +69,4 @@ export function DeleteUserAlert({ userId, userName }: DeleteUserAlertProps) {
     </AlertDialog>
   );
 }
+

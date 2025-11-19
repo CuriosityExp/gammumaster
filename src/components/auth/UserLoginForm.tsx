@@ -7,9 +7,12 @@ import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import type { IDetectedBarcode } from "@yudiel/react-qr-scanner";
+import { useTranslations, useLocale } from "next-intl";
 
 export function UserLoginForm() {
   const router = useRouter();
+  const t = useTranslations('auth');
+  const locale = useLocale();
   const [error, setError] = useState<string>("");
   const [isScanning, setIsScanning] = useState<boolean>(true);
 
@@ -19,7 +22,7 @@ export function UserLoginForm() {
 
     const { rawValue: qrCodeIdentifier } = result[0];
 
-    toast.info("QR Code detected. Logging in...");
+    toast.info(t('qrDetected'));
 
     const res = await signIn("user-credentials", { // <-- Use the user provider
       qrCodeIdentifier,
@@ -27,11 +30,11 @@ export function UserLoginForm() {
     });
 
     if (res?.ok) {
-      toast.success("Login Successful!");
-      router.push("/profile"); // Redirect to the user profile page
+      toast.success(t('loginSuccess'));
+      router.push(`/${locale}/profile`); // Redirect to the user profile page
     } else {
-      toast.error("Login Failed: Invalid QR Code.");
-      setError("Invalid QR Code. Please try again.");
+      toast.error(t('loginFailed'));
+      setError(t('invalidQR'));
       setTimeout(() => {
         setIsScanning(true);
         setError("");
@@ -42,9 +45,9 @@ export function UserLoginForm() {
   return (
     <Card className="w-full max-w-md mx-auto">
       <CardHeader>
-        <CardTitle className="text-center text-3xl font-bold">Welcome!</CardTitle>
+        <CardTitle className="text-center text-3xl font-bold">{t('userLogin')}</CardTitle>
         <CardDescription className="text-center">
-          Scan your personal QR code to view your points and redeem prizes.
+          {t('scanUserQR')}
         </CardDescription>
       </CardHeader>
       <CardContent>

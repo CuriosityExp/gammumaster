@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { createUser } from "@/app/admin/users/actions";
+import { createUser } from "@/app/[locale]/admin/users/actions";
 import { toast } from "sonner";
 import { useState, useRef } from "react";
 import { Plus } from "lucide-react";
@@ -100,3 +100,4 @@ export function CreateUserDialog() {
     </Dialog>
   );
 }
+

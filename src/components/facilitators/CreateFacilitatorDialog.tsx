@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { createFacilitator, getAvailableUsers } from "@/app/admin/facilitators/actions";
+import { createFacilitator, getAvailableUsers } from "@/app/[locale]/admin/facilitators/actions";
 import { toast } from "sonner";
 import { useState, useRef, useEffect } from "react";
 import { Plus } from "lucide-react";
@@ -133,3 +133,4 @@ export function CreateFacilitatorDialog() {
     </Dialog>
   );
 }
+

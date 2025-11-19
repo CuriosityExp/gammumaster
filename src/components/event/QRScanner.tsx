@@ -4,7 +4,7 @@ import { useState } from "react";
 import { Scanner } from "@yudiel/react-qr-scanner";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { recordAttendance } from "@/app/event/[encryptedEventId]/actions";
+import { recordAttendance } from "@/app/[locale]/event/[encryptedEventId]/actions";
 import { toast } from "sonner";
 import { CheckCircle, XCircle, SwitchCamera } from "lucide-react";
 import type { IDetectedBarcode } from "@yudiel/react-qr-scanner";

@@ -13,7 +13,7 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
-import { deleteFacilitator } from "@/app/admin/facilitators/actions";
+import { deleteFacilitator } from "@/app/[locale]/admin/facilitators/actions";
 import { toast } from "sonner";
 import { Trash2 } from "lucide-react";
 import { useState } from "react";
@@ -69,3 +69,4 @@ export function DeleteFacilitatorAlert({ facilitatorId, userName }: DeleteFacili
     </AlertDialog>
   );
 }
+

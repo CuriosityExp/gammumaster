@@ -6,7 +6,7 @@ import { QRCodeCanvas } from "qrcode.react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
-import { regenerateAdminQrCode } from "@/app/admin/account/actions";
+import { regenerateAdminQrCode } from "@/app/[locale]/admin/account/actions";
 import { toast } from "sonner";
 import type { Admin } from "@/generated/prisma";
 

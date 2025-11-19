@@ -13,7 +13,7 @@ import {
 	AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
-import { deleteEvent } from "@/app/admin/events/actions";
+import { deleteEvent } from "@/app/[locale]/admin/events/actions";
 import { toast } from "sonner";
 import { Trash2 } from "lucide-react";
 
@@ -65,3 +65,4 @@ export function DeleteEventAlert({ eventId, eventTitle }: DeleteEventAlertProps)
 		</AlertDialog>
 	);
 }
+

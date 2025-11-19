@@ -1,4 +1,3 @@
-// src/components/admin/DeletePrizeAlert.tsx
 // src/components/prizes/DeletePrizeAlert.tsx
 
 "use client";
@@ -15,7 +14,7 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
-import { deletePrize } from "@/app/admin/prizes/actions";
+import { deletePrize } from "@/app/[locale]/admin/prizes/actions";
 
 interface DeletePrizeAlertProps {
   readonly prizeId: string;
@@ -59,3 +58,4 @@ export function DeletePrizeAlert({
     </AlertDialog>
   );
 }
+

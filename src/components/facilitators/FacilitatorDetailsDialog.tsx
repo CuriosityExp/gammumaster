@@ -10,7 +10,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { getFacilitatorDetails } from "@/app/admin/facilitators/actions";
+import { getFacilitatorDetails } from "@/app/[locale]/admin/facilitators/actions";
 import { toast } from "sonner";
 import { useState, useEffect } from "react";
 import { Eye, TrendingUp, Gift } from "lucide-react";
@@ -187,3 +187,4 @@ export function FacilitatorDetailsDialog({ facilitatorId, userName }: Facilitato
     </Dialog>
   );
 }
+

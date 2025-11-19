@@ -9,13 +9,14 @@ const prisma = new PrismaClient();
 export default async function EventAttendancePage({
 	params,
 }: Readonly<{
-	params: Promise<{ encryptedEventId: string }>;
+	params: Promise<{ encryptedEventId: string; locale: string }>;
 }>) {
 	// Check if user is authenticated as admin or facilitator
 	const session = await getServerSession(authOptions);
+	const { encryptedEventId, locale } = await params;
 	
 	if (!session?.user?.email) {
-		redirect("/admin/login");
+		redirect(`/${locale}/admin/login`);
 	}
 
 	// Verify the user is an admin or facilitator
@@ -23,7 +24,7 @@ export default async function EventAttendancePage({
 	const isFacilitator = session.user.role === "facilitator";
 
 	if (!isAdmin && !isFacilitator) {
-		redirect("/admin/login");
+		redirect(`/${locale}/admin/login`);
 	}
 
 	if (isAdmin) {
@@ -31,18 +32,16 @@ export default async function EventAttendancePage({
 			where: { email: session.user.email },
 		});
 		if (!admin) {
-			redirect("/admin/login");
+			redirect(`/${locale}/admin/login`);
 		}
 	} else if (isFacilitator) {
 		const facilitator = await prisma.userFacilitator.findUnique({
 			where: { userId: session.user.id },
 		});
 		if (!facilitator) {
-			redirect("/admin/login");
+			redirect(`/${locale}/admin/login`);
 		}
 	}
-
-	const { encryptedEventId } = await params;
 
 	if (!encryptedEventId) {
 		notFound();

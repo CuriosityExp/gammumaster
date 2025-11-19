@@ -17,7 +17,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { updatePrize } from "@/app/admin/prizes/actions";
+import { updatePrize } from "@/app/[locale]/admin/prizes/actions";
 import type { Prize } from "@/generated/prisma";
 import { useRef } from "react";
 

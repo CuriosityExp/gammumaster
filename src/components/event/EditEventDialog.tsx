@@ -14,7 +14,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { updateEvent } from "@/app/admin/events/actions";
+import { updateEvent } from "@/app/[locale]/admin/events/actions";
 import { toast } from "sonner";
 import { Pencil } from "lucide-react";
 
@@ -119,3 +119,4 @@ export function EditEventDialog({ event }: EditEventDialogProps) {
 		</Dialog>
 	);
 }
+
