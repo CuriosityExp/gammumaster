@@ -8,14 +8,18 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 import { regenerateAdminQrCode } from "@/app/[locale]/admin/account/actions";
 import { toast } from "sonner";
-import type { Admin } from "@/generated/prisma";
+import { useTranslations } from "next-intl";
+import type { Admin, User } from "@/generated/prisma";
 
 interface QrManagerProps {
-  readonly admin: Admin;
+  readonly admin: Admin | User;
+  readonly isFacilitator?: boolean;
 }
 
-export function QrManager({ admin }: QrManagerProps) {
+export function QrManager({ admin, isFacilitator = false }: QrManagerProps) {
   const qrRef = useRef<HTMLDivElement>(null);
+  const t = useTranslations('admin');
+  const tCommon = useTranslations('common');
 
   const handleDownload = () => {
     const canvas = qrRef.current?.querySelector("canvas");
@@ -42,7 +46,7 @@ export function QrManager({ admin }: QrManagerProps) {
         const url = tempCanvas.toDataURL("image/png");
         const link = document.createElement("a");
         link.href = url;
-        link.download = `admin-qrcode-${admin.email}.png`;
+        link.download = `${isFacilitator ? 'facilitator' : 'admin'}-qrcode-${admin.email || admin.name || 'user'}.png`;
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
@@ -52,7 +56,8 @@ export function QrManager({ admin }: QrManagerProps) {
 
   const handleRegenerate = async () => {
     toast.info("Generating new QR Code...");
-    const result = await regenerateAdminQrCode(admin.adminId);
+    const userId = isFacilitator ? (admin as User).userId : (admin as Admin).adminId;
+    const result = await regenerateAdminQrCode(userId);
     if (result.success) {
       toast.success(result.success);
     } else {
@@ -63,9 +68,9 @@ export function QrManager({ admin }: QrManagerProps) {
   return (
     <Card className="max-w-md mx-auto">
       <CardHeader>
-        <CardTitle>Admin QR Code</CardTitle>
+        <CardTitle>{t('qrCodeTitle', { role: isFacilitator ? 'Facilitator' : 'Admin' })}</CardTitle>
         <CardDescription>
-          Use this QR Code to log in to the admin dashboard. Keep it safe.
+          {t('qrCodeDescription', { role: isFacilitator ? 'facilitator' : 'admin' })}
         </CardDescription>
       </CardHeader>
       <CardContent className="flex flex-col items-center gap-6">
@@ -81,22 +86,22 @@ export function QrManager({ admin }: QrManagerProps) {
         </div>
 
         <div className="flex gap-4">
-          <Button onClick={handleDownload}>Download PNG</Button>
+          <Button onClick={handleDownload}>{t('downloadQR')}</Button>
           <AlertDialog>
             <AlertDialogTrigger asChild>
-              <Button variant="destructive">Regenerate</Button>
+              <Button variant="destructive">{t('regenerateQR')}</Button>
             </AlertDialogTrigger>
             <AlertDialogContent>
               <AlertDialogHeader>
-                <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                <AlertDialogTitle>{t('regenerateConfirmTitle')}</AlertDialogTitle>
                 <AlertDialogDescription>
-                  This will generate a new QR Code. Your old QR Code will no longer work. This action cannot be undone.
+                  {t('regenerateConfirmDesc')}
                 </AlertDialogDescription>
               </AlertDialogHeader>
               <AlertDialogFooter>
-                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                <AlertDialogCancel>{tCommon('cancel')}</AlertDialogCancel>
                 <AlertDialogAction onClick={handleRegenerate}>
-                  Yes, Regenerate
+                  {t('yesRegenerate')}
                 </AlertDialogAction>
               </AlertDialogFooter>
             </AlertDialogContent>

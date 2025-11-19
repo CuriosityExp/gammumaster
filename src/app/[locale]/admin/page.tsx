@@ -134,6 +134,18 @@ export default async function AdminDashboard({
 								hoverBorderColor="hover:border-violet-500"
 							/>
 						</div>
+						<div className="relative group hover:scale-105 transition-transform duration-200">
+							<div className="absolute inset-0 bg-gradient-to-br from-teal-500/10 to-cyan-500/10 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" />
+						<AdminMenuCard
+							title={t('grantHistory')}
+							description={t('grantHistoryDesc')}
+							icon={<Gift className="h-8 w-8 text-teal-500" />}
+							href={`/${locale}/admin/grant-history`}
+								iconBgColor="bg-teal-500/10"
+								iconHoverBgColor="group-hover:bg-teal-500/20"
+								hoverBorderColor="hover:border-teal-500"
+							/>
+						</div>
 					</>
 				)}
 

@@ -9,6 +9,7 @@ declare module "next-auth/jwt" {
     // This is the property we are adding to the JWT
     id: string;
     role?: "admin" | "user" | "facilitator";
+    facilitatorId?: string;
   }
 }
 
@@ -23,6 +24,7 @@ declare module "next-auth" {
       id: string;
       email?: string | null;
       role?: "admin" | "user" | "facilitator";
+      facilitatorId?: string;
     } & DefaultSession["user"]; 
   }
 
@@ -33,5 +35,6 @@ declare module "next-auth" {
   interface User {
     id: string;
     role?: "admin" | "user" | "facilitator";
+    facilitatorId?: string;
   }
 }

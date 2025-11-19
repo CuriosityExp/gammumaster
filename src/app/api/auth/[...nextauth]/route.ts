@@ -45,7 +45,8 @@ export const authOptions: AuthOptions = {
           return {
             id: user.userId,
             email: user.email,
-            role: 'facilitator'
+            role: 'facilitator',
+            facilitatorId: user.facilitator.facilitatorId
           };
         }
 
@@ -79,6 +80,9 @@ export const authOptions: AuthOptions = {
         token.id = user.id; // Use user.id, which we mapped from adminId
         token.email = user.email;
         token.role = user.role as "admin" | "user" | "facilitator";
+        if (user.role === 'facilitator') {
+          token.facilitatorId = user.facilitatorId;
+        }
       }
       return token;
     },
@@ -88,6 +92,9 @@ export const authOptions: AuthOptions = {
         session.user.id = token.id;
         session.user.email = token.email as string;
         session.user.role = token.role as "admin" | "user" | "facilitator";
+        if (token.role === 'facilitator') {
+          session.user.facilitatorId = token.facilitatorId as string;
+        }
       }
       return session;
     },
