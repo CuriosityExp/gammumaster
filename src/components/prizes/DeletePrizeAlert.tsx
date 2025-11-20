@@ -15,6 +15,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import { deletePrize } from "@/app/[locale]/admin/prizes/actions";
+import { useTranslations } from "next-intl";
 
 interface DeletePrizeAlertProps {
   readonly prizeId: string;
@@ -27,31 +28,35 @@ export function DeletePrizeAlert({
 }: DeletePrizeAlertProps) {
   // Bind the prizeId to the server action
   const deletePrizeWithId = deletePrize.bind(null, prizeId);
+  const t = useTranslations('prizes');
+  const tCommon = useTranslations('common');
 
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>
         <Button variant="destructive" size="sm">
-          Delete
+          {t('delete')}
         </Button>
       </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+          <AlertDialogTitle>{t('deleteConfirmTitle') || t('deletePrize', { name: prizeName })}</AlertDialogTitle>
           <AlertDialogDescription>
-            This will archive the prize and hide it from all users. You can
-            recover it from the database later. Are you sure you want to archive{" "}
-            <span className="font-semibold">"{prizeName}"</span>?
+            {t('deleteConfirmDesc', { name: prizeName }) || (
+              <>
+                This will archive the prize and hide it from all users. You can recover it from the database later. Are you sure you want to archive <span className="font-semibold">"{prizeName}"</span>?
+              </>
+            )}
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel>Cancel</AlertDialogCancel>
+          <AlertDialogCancel>{tCommon('cancel')}</AlertDialogCancel>
           <form
             action={async (formData) => {
               await deletePrizeWithId();
             }}
           >
-            <AlertDialogAction type="submit">Continue</AlertDialogAction>
+            <AlertDialogAction type="submit">{t('deleteConfirmAction') || tCommon('delete')}</AlertDialogAction>
           </form>
         </AlertDialogFooter>
       </AlertDialogContent>
