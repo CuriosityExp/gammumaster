@@ -43,7 +43,8 @@ export default async function LocaleLayout({
     <div className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
       <NextIntlClientProvider messages={messages}>
         <Providers>
-          <PageTransition>{children}</PageTransition>
+          {children}
+          {/* <PageTransition>{children}</PageTransition> */}
         </Providers>
         <Toaster richColors />
       </NextIntlClientProvider>

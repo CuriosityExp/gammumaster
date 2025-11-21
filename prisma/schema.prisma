@@ -45,6 +45,8 @@ model User {
 
   // A user can join many classes
   userClasses       UserClass[]
+  // A user can have a cart
+  carts             Cart[]
 }
 
 // Admin model - now with QR login capability
@@ -111,6 +113,7 @@ model Prize {
   name        String
   description String?
   imageUrl    String?  @db.VarChar(256)
+  sourceUrl   String?
   pointCost   Int
   stock       Int      @default(0)
   isEnabled   Boolean  @default(true)
@@ -127,6 +130,8 @@ model Prize {
   createdByFacilitator  UserFacilitator? @relation(fields: [facilitatorId], references: [facilitatorId])
 
   // Note: Application logic should ensure only one of adminId or facilitatorId is set
+  // A prize can be in many user carts
+  userCarts UserCart[]
 }
 
 // Event model - tracks events that users can attend
@@ -191,4 +196,28 @@ model UserClass {
   class     Class    @relation(fields: [classId], references: [classId])
 
   @@unique([userId, classId])
+}
+
+// UserCart model - represents prizes added to a user's cart
+model UserCart {
+  id        Int      @id @default(autoincrement())
+  cartId    Int
+  prizeId   String
+  quantity  Int      @default(1)
+  addedAt   DateTime @default(now())
+
+  cart      Cart     @relation(fields: [cartId], references: [id])
+  prize     Prize    @relation(fields: [prizeId], references: [prizeId])
+
+  @@unique([cartId, prizeId])
+}
+
+// Cart model - groups UserCart items for a user
+model Cart {
+  id        Int      @id @default(autoincrement())
+  userId    String
+  createdAt DateTime @default(now())
+
+  user      User     @relation(fields: [userId], references: [userId])
+  items     UserCart[]
 }

@@ -30,6 +30,9 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { redirect } from "next/navigation";
 import { Suspense } from "react";
+import { ArrowLeft } from 'lucide-react';
+import Link from 'next/link';
+import { Button } from '@/components/ui/button';
 
 const prisma = new PrismaClient();
 
@@ -93,6 +96,7 @@ export default async function AdminUsersPage({
   const searchQuery = searchParamsResolved.search || "";
   const currentPage = Number(searchParamsResolved.page) || 1;
   const t = await getTranslations('users');
+  const tAdmin = await getTranslations('admin');
 
   const granterData = await getGranterData();
 
@@ -105,6 +109,17 @@ export default async function AdminUsersPage({
 
   return (
     <div className="container mx-auto p-8">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-8 gap-4">
+        <Button 
+          asChild
+          variant="outline"
+          className="flex items-center gap-2 w-fit" >
+          <Link href={`/${locale}/admin`}>
+            <ArrowLeft className="h-4 w-4" />
+            {tAdmin("backToDashboard")}
+          </Link>
+        </Button>
+      </div>
       <div className="flex justify-between items-center mb-8">
         <div>
           <div className="inline-flex items-center gap-3 mb-2">
