@@ -13,6 +13,7 @@ const prisma = new PrismaClient();
 
 async function getAdminData() {
   const session = await getServerSession(authOptions);
+  console.log(session);
   if (!session?.user?.id) return null;
 
   if (session.user.role === "admin") {
@@ -57,6 +58,7 @@ export default async function AdminLayout({
               <LanguageSwitcher />
               <AccountDropdown
                 email={adminData.type === "admin" ? adminData.data?.email : adminData.data?.user.email}
+                name={adminData.type === "facilitator" ? adminData.data?.user.name : undefined}
                 availablePoints={adminData.data?.availablePointsToGrant}
                 role={adminData.type}
               />

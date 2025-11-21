@@ -17,6 +17,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { updateEvent } from "@/app/[locale]/admin/events/actions";
 import { toast } from "sonner";
 import { Pencil } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 interface EditEventDialogProps {
 	readonly event: {
@@ -31,6 +32,9 @@ interface EditEventDialogProps {
 export function EditEventDialog({ event }: EditEventDialogProps) {
 	const [open, setOpen] = useState(false);
 	const [loading, setLoading] = useState(false);
+
+	const t = useTranslations('events');
+	const tCommon = useTranslations('common');
 
 	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
@@ -52,22 +56,22 @@ export function EditEventDialog({ event }: EditEventDialogProps) {
 	return (
 		<Dialog open={open} onOpenChange={setOpen}>
 			<DialogTrigger asChild>
-				<Button variant="outline" size="default" className="h-9 px-2 sm:px-4 min-w-0" title="Edit event">
+				<Button variant="outline" size="default" className="h-9 px-2 sm:px-4 min-w-0" title={t('edit')}>
 					<Pencil className="h-4 w-4 shrink-0" />
-					<span className="hidden sm:inline ml-1 lg:ml-2">Edit</span>
+					<span className="hidden sm:inline ml-1 lg:ml-2">{t('edit')}</span>
 				</Button>
 			</DialogTrigger>
 			<DialogContent>
 				<form onSubmit={handleSubmit}>
 					<DialogHeader>
-						<DialogTitle>Edit Event</DialogTitle>
+						<DialogTitle>{t('edit')}</DialogTitle>
 						<DialogDescription>
-							Update the event details.
+							{t('editEventDesc') || 'Update the event details.'}
 						</DialogDescription>
 					</DialogHeader>
 					<div className="grid gap-4 py-4">
 						<div className="grid gap-2">
-							<Label htmlFor="title">Event Title</Label>
+							<Label htmlFor="title">{t('title_field')}</Label>
 							<Input
 								id="title"
 								name="title"
@@ -76,7 +80,7 @@ export function EditEventDialog({ event }: EditEventDialogProps) {
 							/>
 						</div>
 						<div className="grid gap-2">
-							<Label htmlFor="description">Description (Optional)</Label>
+							<Label htmlFor="description">{t('description')} ({tCommon('optional') || 'Optional'})</Label>
 							<Textarea
 								id="description"
 								name="description"
@@ -85,7 +89,7 @@ export function EditEventDialog({ event }: EditEventDialogProps) {
 							/>
 						</div>
 						<div className="grid gap-2">
-							<Label htmlFor="eventBanner">Event Banner URL (Optional)</Label>
+							<Label htmlFor="eventBanner">{t('eventBanner')} ({tCommon('optional') || 'Optional'})</Label>
 							<Input
 								id="eventBanner"
 								name="eventBanner"
@@ -95,7 +99,7 @@ export function EditEventDialog({ event }: EditEventDialogProps) {
 							/>
 						</div>
 						<div className="grid gap-2">
-							<Label htmlFor="pointAmount">Points Awarded</Label>
+							<Label htmlFor="pointAmount">{t('pointAmount')}</Label>
 							<Input
 								id="pointAmount"
 								name="pointAmount"
@@ -108,10 +112,10 @@ export function EditEventDialog({ event }: EditEventDialogProps) {
 					</div>
 					<DialogFooter>
 						<Button type="button" variant="outline" onClick={() => setOpen(false)}>
-							Cancel
+							{tCommon('cancel')}
 						</Button>
 						<Button type="submit" disabled={loading}>
-							{loading ? "Updating..." : "Update Event"}
+							{loading ? t('updating') || 'Updating...' : t('updateEvent') || 'Update Event'}
 						</Button>
 					</DialogFooter>
 				</form>

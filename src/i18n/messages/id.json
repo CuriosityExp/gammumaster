@@ -26,7 +26,8 @@
     "points": "Poin",
     "total": "Total",
     "showing": "Menampilkan {count} dari {total}",
-    "page": "Halaman"
+    "page": "Halaman",
+    "optional": "Opsional"
   },
   "nav": {
     "home": "Beranda",
@@ -50,7 +51,22 @@
     "scannerReactivate": "Scanner akan aktif kembali dalam {seconds} detik",
     "scannerReactivatePlural": "Scanner akan aktif kembali dalam {seconds} detik",
     "unauthorized": "Tidak Diizinkan",
-    "sessionExpired": "Sesi berakhir. Silakan login kembali"
+    "sessionExpired": "Sesi berakhir. Silakan login kembali",
+    "positionQR": "Posisikan kode QR Anda dalam bidang kamera",
+    "qrLightingTip": "Pastikan kode QR cukup terang dan terlihat jelas"
+  },
+  "home": {
+    "title": "Selamat datang di GammuMaster",
+    "subtitle": "Manajemen kelas dan event yang sederhana dan penuh warna untuk fasilitator dan siswa.",
+    "getStarted": "Mulai",
+    "loginAdmin": "Masuk Admin",
+    "feature1Title": "Kelola Kelas",
+    "feature1Desc": "Buat dan atur kelas dengan mudah.",
+    "feature2Title": "Lacak Kehadiran",
+    "feature2Desc": "Gunakan scan QR untuk kehadiran cepat dan poin.",
+    "feature3Title": "Hadiah & Penukaran",
+    "feature3Desc": "Biarkan siswa menukarkan poin untuk hadiah.",
+    "smallNote": "Pindai kode QR Anda untuk masuk dengan cepat."
   },
   "admin": {
     "dashboard": "Dasbor Admin",
@@ -117,7 +133,39 @@
     "regenerateQR": "Buat Ulang",
     "regenerateConfirmTitle": "Apakah Anda benar-benar yakin?",
     "regenerateConfirmDesc": "Ini akan membuat Kode QR baru. Kode QR lama Anda tidak akan berfungsi lagi. Tindakan ini tidak dapat dibatalkan.",
-    "yesRegenerate": "Ya, Buat Ulang"
+    "yesRegenerate": "Ya, Buat Ulang",
+    "classManagement": "Manajemen Kelas",
+    "classManagementDesc": "Buat, edit, dan kelola kelas untuk pengguna.",
+    "createClass": "Buat Kelas",
+    "classTitle": "Judul Kelas",
+    "classDescription": "Deskripsi Kelas",
+    "classImageUrl": "URL Gambar Kelas",
+    "classLocation": "Lokasi Kelas",
+    "classCreatedSuccess": "Kelas berhasil dibuat",
+    "classCreatedError": "Gagal membuat kelas",
+    "classCreatedErrorDesc": "Terjadi kesalahan saat membuat kelas",
+    "classUpdatedSuccess": "Kelas berhasil diperbarui",
+    "classUpdatedError": "Gagal memperbarui kelas",
+    "classUpdatedErrorDesc": "Terjadi kesalahan saat memperbarui kelas",
+    "classDeletedSuccess": "Kelas berhasil dihapus",
+    "classDeletedError": "Gagal menghapus kelas",
+    "classDeletedErrorDesc": "Terjadi kesalahan saat menghapus kelas",
+    "confirmDeleteClass": "Apakah Anda yakin ingin menghapus kelas ini?",
+    "manageStudents": "Kelola Siswa",
+    "enrolledStudents": "Siswa Terdaftar",
+    "addStudents": "Tambah Siswa",
+    "noStudentsEnrolled": "Belum ada siswa terdaftar",
+    "allUsersEnrolled": "Semua pengguna sudah terdaftar di kelas ini",
+    "noUsersFound": "Tidak ada pengguna yang sesuai dengan pencarian Anda",
+    "searchUsers": "Cari pengguna...",
+    "unnamedUser": "Pengguna Tanpa Nama",
+    "addToClass": "Tambah",
+    "removeFromClass": "Hapus",
+    "addOrRemoveStudents": "Tambah atau hapus siswa dari kelas ini",
+    "myAccount": "Akun Saya",
+    "accountNotFound": "Tidak dapat menemukan akun Anda. Silakan coba masuk lagi.",
+    "loading": "Memuat...",      
+    "noData": "Tidak ada data"
   },
   "eventCard": {
     "copyEventLink": "Salin tautan event",
@@ -133,7 +181,10 @@
     "eventScanner": "Pemindai Event"
   },
   "prizes": {
+      "deleteConfirmAction": "Hapus Hadiah",
     "title": "Kelola Hadiah",
+    "deleteConfirmTitle": "Apakah Anda yakin?",
+    "deleteConfirmDesc": "Ini akan menghapus hadiah \"{name}\". Tindakan ini tidak dapat dibatalkan.",
     "create": "Buat Hadiah",
     "createNew": "Buat Hadiah Baru",
     "edit": "Edit Hadiah",
@@ -198,6 +249,12 @@
     "createdSuccess": "Event berhasil dibuat",
     "updatedSuccess": "Event berhasil diperbarui",
     "deletedSuccess": "Event berhasil dihapus",
+    "editEventDesc": "Perbarui detail event.",
+    "updating": "Memperbarui...",
+    "updateEvent": "Perbarui Event",
+    "deleteConfirmTitle": "Apakah Anda yakin?",
+    "deleteConfirmDesc": "Ini akan menghapus event \"{title}\". Tindakan ini tidak dapat dibatalkan.",
+    "deleting": "Menghapus...",
     "totalUsers": "Total Pengguna: {count}",
     "checkInDates": "Tanggal Check-in: {count}",
     "noAttendances": "Belum ada kehadiran yang dicatat",
@@ -205,6 +262,7 @@
     "attendees": "Peserta"
   },
   "users": {
+      "actions": "Aksi",
     "title": "Kelola Pengguna",
     "create": "Buat Pengguna",
     "createNew": "Buat Pengguna Baru",

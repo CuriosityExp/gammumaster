@@ -15,9 +15,10 @@ const PrizeSchema = z.object({
   imageUrl: z.string().url("Must be a valid URL").optional().or(z.literal('')),
   pointCost: z.coerce.number().int().min(1, "Point cost must be at least 1"),
   stock: z.coerce.number().int().min(0, "Stock cannot be negative"),
+  isEnabled: z.coerce.boolean().optional(),
 });
 
-// This is our Server Action
+
 export async function createPrize(formData: FormData) {
   // Find an admin to associate the prize with (in a real app, this would be the logged-in admin)
   const admin = await prisma.admin.findFirst();
@@ -31,6 +32,7 @@ export async function createPrize(formData: FormData) {
     imageUrl: formData.get("imageUrl"),
     pointCost: formData.get("pointCost"),
     stock: formData.get("stock"),
+    isEnabled: formData.get("isEnabled") === "on" || formData.get("isEnabled") === "true",
   });
 
   if (!validatedFields.success) {
@@ -63,6 +65,7 @@ export async function updatePrize(prizeId: string, formData: FormData) {
     imageUrl: formData.get("imageUrl"),
     pointCost: formData.get("pointCost"),
     stock: formData.get("stock"),
+    isEnabled: formData.get("isEnabled") === "on" || formData.get("isEnabled") === "true",
   });
 
   if (!validatedFields.success) {

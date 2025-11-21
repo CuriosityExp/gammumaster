@@ -27,7 +27,6 @@ async function getPrizes(searchQuery: string, page: number) {
 
   // Build WHERE clause
   const where = {
-    isEnabled: true,
     deletedAt: null,
     ...(searchQuery && {
       OR: [

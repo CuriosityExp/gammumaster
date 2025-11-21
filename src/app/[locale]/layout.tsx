@@ -5,6 +5,7 @@ import { locales } from '@/i18n/config';
 import { Geist, Geist_Mono } from 'next/font/google';
 import { Toaster } from 'sonner';
 import Providers from '../providers';
+import PageTransition from '@/components/PageTransition';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -41,7 +42,9 @@ export default async function LocaleLayout({
   return (
     <div className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
       <NextIntlClientProvider messages={messages}>
-        <Providers>{children}</Providers>
+        <Providers>
+          <PageTransition>{children}</PageTransition>
+        </Providers>
         <Toaster richColors />
       </NextIntlClientProvider>
     </div>

@@ -1,6 +1,7 @@
-// src/components/prizes/CreatePrizeDialog.tsx
 
 "use client";
+// src/components/prizes/CreatePrizeDialog.tsx
+import { Switch } from "@/components/ui/switch";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -73,6 +74,17 @@ export function CreatePrizeDialog() {
           action={handleSubmit}
         >
           <div className="grid gap-4 py-4 max-h-[60vh] overflow-y-auto px-1">
+                        <div className="grid grid-cols-4 items-center gap-4">
+                          <Label htmlFor="isEnabled" className="text-right">{t('enabled')}</Label>
+                          <div className="col-span-3">
+                            <Switch
+                              id="isEnabled"
+                              name="isEnabled"
+                              label={t('enabled')}
+                              defaultChecked={true}
+                            />
+                          </div>
+                        </div>
             <div className="grid grid-cols-4 items-center gap-4">
               <Label htmlFor="name" className="text-right">
                 {t('name')}<span className="text-red-500">*</span>

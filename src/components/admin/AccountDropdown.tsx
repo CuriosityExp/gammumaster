@@ -17,11 +17,12 @@ import { useLocale } from "next-intl";
 
 interface AccountDropdownProps {
   readonly email: string | null | undefined;
+  readonly name?: string;
   readonly availablePoints?: number;
   readonly role: "admin" | "facilitator";
 }
 
-export function AccountDropdown({ email, availablePoints, role }: AccountDropdownProps) {
+export function AccountDropdown({ email, name, availablePoints, role }: AccountDropdownProps) {
   const locale = useLocale();
   const handleLogout = async () => {
     await signOut({ callbackUrl: `/${locale}/admin/login` });
@@ -31,7 +32,7 @@ export function AccountDropdown({ email, availablePoints, role }: AccountDropdow
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button variant="ghost" className="flex flex-col items-end h-auto py-2">
-          <span className="text-sm font-medium">{email}</span>
+          <span className="text-sm font-medium">{name || email || 'User'}</span>
           {availablePoints !== undefined && (
             <span className="text-xs text-muted-foreground">
               {availablePoints.toLocaleString()} points {role === "admin" ? "remaining" : "available"}

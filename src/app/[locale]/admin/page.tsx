@@ -1,5 +1,5 @@
 import { AdminMenuCard } from "@/components/admin/AdminMenuCard";
-import { Gift, Calendar, Users, User, Shield, QrCode } from "lucide-react";
+import { Gift, Calendar, Users, User, Shield, QrCode, BookOpen } from "lucide-react";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { redirect } from "next/navigation";
@@ -44,14 +44,28 @@ export default async function AdminDashboard({
 			<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
 				<div className="relative group hover:scale-105 transition-transform duration-200">
 					<div className="absolute inset-0 bg-gradient-to-br from-amber-500/10 to-orange-500/10 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" />
-				<AdminMenuCard
-					title={t('prizeManagement')}
-					description={t('prizeManagementDesc')}
-					icon={<Gift className="h-8 w-8 text-amber-500" />}
-					href={`/${locale}/admin/prizes`}
+					<AdminMenuCard
+						title={t('prizeManagement')}
+						description={t('prizeManagementDesc')}
+						icon={<Gift className="h-8 w-8 text-amber-500" />}
+						href={`/${locale}/admin/prizes`}
 						iconBgColor="bg-amber-500/10"
 						iconHoverBgColor="group-hover:bg-amber-500/20"
 						hoverBorderColor="hover:border-amber-500"
+					/>
+				</div>
+
+				{/* Class Management menu for both Admin and Facilitator */}
+				<div className="relative group hover:scale-105 transition-transform duration-200">
+					<div className="absolute inset-0 bg-gradient-to-br from-yellow-500/10 to-lime-500/10 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" />
+					<AdminMenuCard
+						title={t('classManagement')}
+						description={t('classManagementDesc')}
+						icon={<BookOpen className="h-8 w-8 text-yellow-600" />}
+						href={`/${locale}/admin/classes`}
+						iconBgColor="bg-yellow-500/10"
+						iconHoverBgColor="group-hover:bg-yellow-500/20"
+						hoverBorderColor="hover:border-yellow-500"
 					/>
 				</div>
 				

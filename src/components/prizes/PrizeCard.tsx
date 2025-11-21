@@ -26,6 +26,9 @@ import { Package, TrendingUp, X } from "lucide-react";
 import type { Prize } from '@/generated/prisma';
 import { EditPrizeDialog } from "./EditPrizeDialog";
 import { DeletePrizeAlert } from "./DeletePrizeAlert";
+import { Switch } from "@/components/ui/switch";
+import { useTransition } from "react";
+import { updatePrize } from "@/app/[locale]/admin/prizes/actions";
 
 const FALLBACK_IMAGE_URL = "https://via.placeholder.com/300x200.png?text=No+Image";
 
@@ -35,8 +38,9 @@ interface PrizeCardProps {
 
 export function PrizeCard({ prize }: PrizeCardProps) {
   const t = useTranslations('prizes');
-  const tCommon = useTranslations('common');
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [isEnabled, setIsEnabled] = useState(prize.isEnabled);
+  const [isPending, startTransition] = useTransition();
   
   const handleImageError = (e: React.SyntheticEvent<HTMLImageElement, Event>) => {
     e.currentTarget.src = FALLBACK_IMAGE_URL;
@@ -49,6 +53,23 @@ export function PrizeCard({ prize }: PrizeCardProps) {
       return;
     }
     setIsDialogOpen(true);
+  };
+
+  // Handle switch toggle
+  const handleToggle = () => {
+    const newValue = !isEnabled;
+    setIsEnabled(newValue);
+    startTransition(async () => {
+      // Only send isEnabled, keep other fields unchanged
+      const formData = new FormData();
+      formData.set("name", prize.name);
+      formData.set("description", prize.description || "");
+      formData.set("imageUrl", prize.imageUrl || "");
+      formData.set("pointCost", String(prize.pointCost));
+      formData.set("stock", String(prize.stock));
+      formData.set("isEnabled", String(newValue));
+      await updatePrize(prize.prizeId, formData);
+    });
   };
 
   return (
@@ -100,7 +121,14 @@ export function PrizeCard({ prize }: PrizeCardProps) {
           <Package className="h-4 w-4" />
           <span>{prize.stock > 0 ? `${prize.stock} ${t('stock')}` : t('disabled')}</span>
         </div>
-        <div className="flex items-center gap-2" onClick={e => e.stopPropagation()}>
+        <div className="flex items-center gap-4" onClick={e => e.stopPropagation()}>
+          <Switch
+            checked={isEnabled}
+            onChange={handleToggle}
+            disabled={isPending}
+            label={isEnabled ? t('enabled') : t('disabled')}
+            className={isEnabled ? '' : 'opacity-60'}
+          />
           <EditPrizeDialog prize={prize} />
           <DeletePrizeAlert prizeId={prize.prizeId} prizeName={prize.name} />
         </div>

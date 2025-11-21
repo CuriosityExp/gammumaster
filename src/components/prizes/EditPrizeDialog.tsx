@@ -18,6 +18,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { updatePrize } from "@/app/[locale]/admin/prizes/actions";
+import { Switch } from "@/components/ui/switch";
 import type { Prize } from "@/generated/prisma";
 import { useRef, useState } from "react";
 import { toast } from "sonner";
@@ -80,6 +81,17 @@ export function EditPrizeDialog({ prize }: EditPrizeDialogProps) {
           }}
         >
           <div className="grid gap-4 py-4 max-h-[60vh] overflow-y-auto px-1">
+                        <div className="grid grid-cols-4 items-center gap-4">
+                          <Label htmlFor="isEnabled" className="text-right">{t('enabled')}</Label>
+                          <div className="col-span-3">
+                            <Switch
+                              id="isEnabled"
+                              name="isEnabled"
+                              label={prize.isEnabled ? t('enabled') : t('disabled')}
+                              defaultChecked={prize.isEnabled}
+                            />
+                          </div>
+                        </div>
             <div className="grid grid-cols-4 items-center gap-4">
               <Label htmlFor="name" className="text-right">{t('name')}<span className="text-red-500">*</span></Label>
               <Input id="name" name="name" defaultValue={prize.name} required className="col-span-3" />

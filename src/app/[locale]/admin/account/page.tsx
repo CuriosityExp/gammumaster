@@ -3,6 +3,10 @@ import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { redirect } from "next/navigation";
 import { PrismaClient } from "@/generated/prisma";
 import { QrManager } from "@/components/admin/QrManager";
+import Link from 'next/link';
+import { getTranslations } from 'next-intl/server';
+import { Button } from '@/components/ui/button';
+import { ArrowLeft } from 'lucide-react';
 
 const prisma = new PrismaClient();
 
@@ -29,6 +33,7 @@ export default async function AdminAccountPage({
   readonly params: Promise<{ readonly locale: string }>;
 }) {
   const { locale } = await params;
+  const t = await getTranslations('admin');
   const session = await getServerSession(authOptions);
 
   // Protect the page: if no session or user ID, redirect to login
@@ -52,7 +57,7 @@ export default async function AdminAccountPage({
   if (!userData) {
     return (
       <div className="container mx-auto p-8">
-        <p>Error: Could not find your account. Please try logging in again.</p>
+        <p>{t('accountNotFound')}</p>
       </div>
     );
   }
@@ -60,7 +65,15 @@ export default async function AdminAccountPage({
   return (
     <div className="container mx-auto p-8">
       <div className="flex justify-between items-center mb-8">
-        <h1 className="text-4xl font-bold">My Account</h1>
+        <h1 className="text-4xl font-bold">{t('myAccount')}</h1>
+      </div>
+      <div className="flex justify-between items-center mb-8">
+        <Button asChild variant="outline">
+          <Link href={`/${locale}/admin/dashboard`}>
+            <ArrowLeft className="mr-2 h-4 w-4" />
+            {t('backToDashboard')}
+          </Link>
+        </Button>
       </div>
       <QrManager admin={userData} isFacilitator={session.user.role === "facilitator"} />
     </div>

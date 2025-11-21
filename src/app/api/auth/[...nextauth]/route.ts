@@ -10,6 +10,9 @@ export const authOptions: AuthOptions = {
   session: {
     strategy: "jwt",
   },
+  jwt: {
+    maxAge: 60 * 60 * 12, // 12 hours
+  },
   providers: [
     CredentialsProvider({
       id: "admin-credentials",
@@ -83,6 +86,11 @@ export const authOptions: AuthOptions = {
         if (user.role === 'facilitator') {
           token.facilitatorId = user.facilitatorId;
         }
+      }
+      // Check if token is expired
+      if (token.exp && Date.now() >= token.exp * 1000) {
+        // Token is expired, return null to invalidate
+        return null;
       }
       return token;
     },
